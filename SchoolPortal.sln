@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolPortal", "SchoolPortal\SchoolPortal.csproj", "{A2D4BAE4-FDE4-401A-AAAE-74909DBB1872}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolPortal.Tests", "SchoolPortal.Tests\SchoolPortal.Tests.csproj", "{DE8B51AE-1512-4F1B-998D-68AB664FDCC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2D4BAE4-FDE4-401A-AAAE-74909DBB1872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2D4BAE4-FDE4-401A-AAAE-74909DBB1872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2D4BAE4-FDE4-401A-AAAE-74909DBB1872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2D4BAE4-FDE4-401A-AAAE-74909DBB1872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE8B51AE-1512-4F1B-998D-68AB664FDCC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE8B51AE-1512-4F1B-998D-68AB664FDCC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE8B51AE-1512-4F1B-998D-68AB664FDCC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE8B51AE-1512-4F1B-998D-68AB664FDCC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
