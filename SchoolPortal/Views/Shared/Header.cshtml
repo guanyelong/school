@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Header</title>
+    <style>
+        .top {
+            width: 100%;
+            height: 34px;
+            background: #333333;
+        }
+
+        .top .top_con {
+            height: 34px;
+            font-size: 14px;
+            line-height: 34px;
+            color: #fff;
+        }
+
+        .top .top_con h1 .tel {
+            width: 22px;
+            height: 22px;
+            display: block;
+            float: left;
+            background: url(~/Images/header/sprite.png) no-repeat 0 0;
+            margin: 6px 5px 6px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top">
+        <div class="top_con width clearfix">
+            <div class="logo fl">
+                <a href="/YQYZ/YZYZIndex.aspx">
+                    <img src="/YQYZ/images/logo.png" />
+                </a>
+            </div>
+            <div class="top_right fr clearfix">
+                <a href="#" class="fl" style="color: #fff; margin-left: 20px;">进入资源平台</a>
+                <a href="#" class="fl" style="color: #fff; margin-left: 20px;" id="divSude" target="_blank">进入教育平台</a>
+                <a href="#" target="_blank" id="GoBBS" class="fl" style="color: #fff; margin-left: 20px;">进入论坛</a>
+                <div class="fr login_resig" id="loginItem">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
