@@ -1,0 +1,35 @@
+﻿
+@{
+    Layout = null;
+}
+<script src="/Scripts/JCenter.js" type="text/javascript"></script>
+<div id="ctabs">
+    <div title="首页">
+        <div class="easyui-layout" data-options="fit:true,border:false">
+            <div data-options="region:'center',border:false,fit:true" style="overflow: hidden;">
+                <div class="easyui-layout" data-options="fit:true,border:false">
+                    <div data-options="region:'center',border:false,href:'/Home/Portal'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- tab右键菜单 -->
+<div id="ctabsMenu" style="width: 120px; display: none;">
+    <div data-options="iconCls:'icon-copy'">
+        复制标题
+    </div>
+    <div data-options="iconCls:'icon-tabRefresh'">
+        刷新Tab页
+    </div>
+    <div data-options="iconCls:'icon-tabClose'">
+        关闭Tab页
+    </div>
+    <div data-options="iconCls:'icon-otherTabsClose'">
+        关闭其他Tab页
+    </div>
+    <div data-options="iconCls:'icon-tabsCloseAll'">
+        关闭所有Tab页
+    </div>
+</div>

@@ -1,0 +1,141 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section queryform
+{
+
+}
+<table id="grid" title="用户操作" iconcls="icon-view">
+
+</table>
+
+<script type="text/javascript">
+    $(function () {
+
+    })
+
+    function initData() {
+        $('#grid').datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: '/Registration/GetDataList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: '挂号列表',
+            iconCls: 'icon-view',
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            pageSize: 100,
+            pageList: [50, 100, 200],
+            rownumbers: true,
+            singleSelect: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            sortOrder: 'asc',
+            remoteSort: false,
+            method: 'post',
+            idField: 'ID',
+            queryParams: queryData,  //异步查询的参数
+            toolbar: toolbar,
+            columns: [[
+                         { title: 'ID', field: 'ID', width: 120 },   //选择
+                         { title: '用户名称', field: 'UserName', width: 120 },
+                         { title: '用户邮箱', field: 'Email', width: 120 },
+                         { title: '订单号', field: 'OrderID', width: 140 },
+                         { title: '服务编号', field: 'ServiceNum', width: 140 },
+                         { title: '优惠券名称', field: 'HandselName', width: 120 },
+                         { title: '金额', field: 'Money', width: 120, editor: { type: 'numberbox', options: { required: true } } },
+                         { title: '创建时间', field: 'CreateTime', width: 120 },
+                         {
+                             title: '状态', field: 'State', width: 120, editor: { type: 'combobox', options: { required: true, valueField: 'id', textField: 'text', data: handselMenu } }, formatter: function (value, row, index) {
+                                 value = value + "";
+                                 return GetHandsetState(value);
+                             }
+                         },
+                         {
+                             title: '获取途径', field: 'Flag', width: 120, formatter: function (value, row, index) {
+                                 value = value + "";
+                                 return GetHandsetFlag(value);
+                             }
+                         },
+                         {
+                             title: '有效开始时间', field: 'ServiceStart', width: 240, editor: { type: 'datetimebox', options: { required: true } }, formatter: function (value, row, index) {
+                                 var pa = /.*\((.*)\)/;
+                                 if (value.match(pa) != null && value.match(pa).length > 1) {
+                                     var unixtime = value.match(pa)[1].substring(0, 10);
+                                     return getTime(unixtime);
+                                 }
+                                 return value;
+
+                             }
+                         },
+                         {
+                             title: '有效结束时间', field: 'ServiceEnd', width: 240, editor: { type: 'datetimebox', options: { required: true } }, formatter: function (value, row, index) {
+                                 var pa = /.*\((.*)\)/;
+                                 if (value.match(pa) != null && value.match(pa).length > 1) {
+                                     var unixtime = value.match(pa)[1].substring(0, 10);
+                                     return getTime(unixtime);
+                                 }
+                                 return value;
+                             }
+                         }
+            ]],
+            onLoadSuccess: function (d) {
+                $.extend($.fn.validatebox.defaults.rules, {
+                    range: {
+                        validator: function (value, param) {
+                            if (/^[1-9]\d*$/.test(value)) {
+                                return value >= param[0] && value <= param[1]
+                            } else {
+                                return false;
+                            }
+                        },
+                        message: '选择的时间段错误'
+                    }
+                });
+
+                $(".xx").tooltip(
+                        {
+                            position: "right",
+                            onShow: function () {
+                                $(this).tooltip('tip').css({
+                                    width: '300px',
+                                    boxShadow: '1px 1px 3px #292929'
+                                });
+                            }
+                        }
+                    );
+                //设置其他控件状态
+                if (d.total > 0) {
+                } else {
+
+                }
+            },
+            onClickRow: function (rowIndex, rowData) {
+                if (editRow != undefined) {
+                    $("#grid").datagrid('endEdit', editRow);
+                }
+            },
+            onAfterEdit: function (rowIndex, rowData, changes) {
+
+                editRow = undefined;
+            },
+            onCancelEdit: function (rowIndex, rowData) {
+                $('#grid').datagrid('refreshRow', rowIndex);
+            },
+            onDblClickRow: function (rowIndex, rowData) {
+                if (rowData.State != 3) {
+                    if (editRow != undefined) {
+                        $("#grid").datagrid('endEdit', editRow);
+                    }
+
+                    if (editRow == undefined) {
+                        $("#grid").datagrid('beginEdit', rowIndex);
+                        editRow = rowIndex;
+                    }
+                }
+            }
+        })
+    }
+
+</script>

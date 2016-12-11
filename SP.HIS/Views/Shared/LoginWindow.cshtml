@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "用户登录";
+    ViewBag.Keywords = "医疗管理系统";
+    ViewBag.Description = "医疗管理系统-医疗管理系统";
+    Layout = null;
+}
+@model SP.Models.HIS.LoginInfo
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LoginWindow</title>
+    <style type="text/css">
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        body {
+            font-size: 14px;
+            font-family: "微软雅黑",microsoft yahei ui;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        a, em, p {
+            font-family: "微软雅黑",microsoft yahei ui;
+        }
+        .fl {
+            float:left;
+        }
+        /*
+         .top_top_con H1 {
+            color: #fff;
+            font-size: 18px;
+            line-height: 88px;
+            font-family: "华康简综艺","微软雅黑",microsoft yahei ui;
+            font-weight: normal;
+        }
+
+        .Login {
+        }
+
+            .Login .login_con {
+                background: #fff;
+                border-radius: 3px;
+                padding: 10px;
+                width: 300px;
+                height: 310px;
+                margin: auto;
+                padding: 20px;
+            }
+
+                .Login .login_con h1 {
+                    text-align: center;
+                    font-size: 18px;
+                    color: #666;
+                    font-family: "微软雅黑",microsoft yahei ui;
+                    line-height: 32px;
+                    margin-bottom: 10px;
+                }
+
+                .Login .login_con form span.btn input.btn_btn {
+                    color: #fff;
+                    background: #0489e7;
+                    width: 300px;
+                    height: 35px;
+                    cursor: pointer;
+                    border: 1px solid #0072e3;
+                    border-radius: 3px;
+                }
+
+                    .Login .login_con form span.btn input.btn_btn:hover {
+                        background: #2ba2f3;
+                        width: 300px;
+                        height: 35px;
+                    }
+
+                .Login .login_con .con .xian {
+                    line-height: 44px;
+                    position: relative;
+                }
+
+                    .Login .login_con .con .xian .icon img {
+                        position: absolute;
+                        top: 18px;
+                        left: 8px;
+                    }
+
+                .Login .login_con .con li {
+                    padding: 6px 0;
+                    color: #666;
+                }
+
+                .Login .login_con .con input.kuang {
+                    height: 35px;
+                    line-height: 35px;
+                    border-radius: 3px;
+                    border: 1px solid #e5e5e5;
+                    padding-left: 32px;
+                    width: 266px;
+                }
+
+                .Login .login_con .con input.kuang1 {
+                    height: 35px;
+                    line-height: 35px;
+                    border-radius: 3px;
+                    border: 1px solid #e5e5e5;
+                    padding-left: 32px;
+                }
+
+        .yzm {
+        }
+
+            .yzm .yzmtu img {
+                margin-left: 10px;
+            }
+
+        .Login .login_con form p.forget {
+            margin-left: 4px;
+        }
+
+            .Login .login_con form p.forget b a, .Login .login_con form p.forget b lable {
+                font-family: "微软雅黑",microsoft yahei ui;
+                color: #306cb6;
+                line-height: 18px;
+            }
+
+            .Login .login_con form p.forget b.left_l input {
+                margin-right: 4px;
+            }
+
+        .code {
+            font-family: Arial;
+            font-style: italic;
+            color: Red;
+            border: 0;
+            padding: 2px 3px;
+            letter-spacing: 3px;
+            font-weight: bolder;
+        }
+
+        */
+    </style>
+</head>
+<body style="background:#fff;">
+    @using (Html.BeginForm("Home", "LoginUser", FormMethod.Post, new { id = "form" }))
+    {
+        @Html.ValidationSummary(true)
+        <h1>Login Form</h1>
+        <div>
+            @Html.TextBoxFor(m => m.LoginName, new { placeholder = "请输入用户名", @class = "kuang", id = "txt_loginName" })
+            @Html.ValidationMessageFor(m=>m.LoginName)
+        </div>
+        <div>
+            @Html.PasswordFor(m => m.PASSWORD, new { placeholder = "请输入密码", @class = "kuang1", id = "txt_passWord" })
+            @Html.ValidationMessageFor(m => m.PASSWORD)
+        </div>
+        <div >
+            <input type="button" value="Log in" id="btnlogin" />
+            <a href="#">忘记密码?</a>
+            <a href="#">注册</a>
+        </div>
+            @*<div class="Login">
+
+                    <div class="login_conaa">
+                        <div class="login_con">
+                            <div class="form">
+                                    <ul class="con">
+                                        <li class="xian">
+                                            <span class="icon">
+                                                <img src="~/Content/Images/Login/people.png" />
+                                            </span>@Html.DisplayFor(m=>m.LoginName)
+                                            @Html.TextBoxFor(m => m.LoginName, new { placeholder = "请输入用户名",@class= "kuang",id= "txt_loginName" })
+                                        </li>
+                                        <li class="xian">
+                                            <span class="icon">
+                                                <img src="~/Content/images/login/password.png" />
+                                            </span>@Html.PasswordFor(m=>m.PASSWORD,new { placeholder="请输入密码", @class = "kuang1" ,id = "txt_passWord" })
+                                        </li>
+                                        <li>
+                                            <span class="btn">
+
+                                              <input  value="登录" type="submit" />
+                                            </span>
+                                        </li>
+                                    </ul>
+                                    <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+    }
+    <div class="button">
+        <a href="#">@@北京市医疗管理系统</a>
+    </div><!-- button -->
+    <script src="@Url.Content("/Scripts/jquery-1.10.2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("/Scripts/jquery.validate.min.js")"  type="text/javascript"></script>
+    <script src="@Url.Content("/Scripts/jquery.validate.unobtrusive.min.js")"  type="text/javascript"></script>
+
+    <script type="text/javascript">
+        
+        $(function () {
+            $("#btnlogin").click(function () {
+                if ($("#form").valid()) {
+                    //$.post("/Home/LoginUser", { data: validata() }, function (result) {
+
+                    //})
+                    $.ajax({
+                        url: "/Home/LoginUser/",
+                        type: "POST",
+                        cache: false,
+                        data: validata(),
+                        success: function (data) {
+                            
+                        }
+                    });
+                }
+            });
+        })
+
+        function validata() {
+            var name = $("#txt_loginName").val();
+            var pwd = $("#txt_passWord").val();
+            return { LoginName: name, PASSWORD :pwd};
+        }
+    </script>
+</body>
+
+</html>

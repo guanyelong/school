@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HISManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SYS_Action">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="DESC" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionMenu" Type="int" />
+          <Property Name="CREATETIME" Type="datetime" />
+          <Property Name="Flag" Type="int" />
+          <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityType Name="SYS_ITEMMENU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuNum" Type="varchar" MaxLength="50" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="TEXT" Type="nvarchar" MaxLength="50" />
+          <Property Name="URL" Type="nvarchar" MaxLength="50" />
+          <Property Name="ICON" Type="nvarchar" MaxLength="200" />
+          <Property Name="CREATETIME" Type="datetime" />
+          <Property Name="STATE" Type="nvarchar" MaxLength="10" />
+          <Property Name="CHECKED" Type="bit" />
+          <Property Name="SEQ" Type="int" />
+          <Property Name="ActionNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="ORDERINDEX" Type="int" />
+        </EntityType>
+        <EntityType Name="SYS_ROLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLENAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="STATE" Type="tinyint" />
+          <Property Name="ROLENUM" Type="nvarchar" MaxLength="50" />
+          <Property Name="CREATETIME" Type="datetime" />
+          <Property Name="FLAG" Type="int" />
+        </EntityType>
+        <EntityType Name="SYS_ROLEACTIONMAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLEID" Type="int" />
+          <Property Name="ACTIONID" Type="int" />
+          <Property Name="CREATETIME" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SYS_USERINFO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GUID" Type="uniqueidentifier" />
+          <Property Name="LoginName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" />
+          <Property Name="NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="AGE" Type="int" />
+          <Property Name="SEX" Type="bigint" />
+          <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SYS_USERROLEMAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ROLEID" Type="int" />
+          <Property Name="USERID" Type="int" />
+          <Property Name="CREATEDATE" Type="datetime" />
+        </EntityType>
+        <EntityContainer Name="HISManagerModelStoreContainer">
+          <EntitySet Name="SYS_Action" EntityType="Self.SYS_Action" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ITEMMENU" EntityType="Self.SYS_ITEMMENU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ROLE" EntityType="Self.SYS_ROLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_ROLEACTIONMAPPING" EntityType="Self.SYS_ROLEACTIONMAPPING" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_USERINFO" EntityType="Self.SYS_USERINFO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_USERROLEMAPPING" EntityType="Self.SYS_USERROLEMAPPING" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HISManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SYS_USERINFO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GUID" Type="Guid" />
+          <Property Name="LoginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AGE" Type="Int32" />
+          <Property Name="SEX" Type="Int64" />
+          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="HISDataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SYS_USERINFO" EntityType="Self.SYS_USERINFO" />
+          <EntitySet Name="SYS_USERROLEMAPPING" EntityType="HISManagerModel.SYS_USERROLEMAPPING" />
+          <EntitySet Name="SYS_Action" EntityType="HISManagerModel.SYS_Action" />
+          <EntitySet Name="SYS_ROLEACTIONMAPPING" EntityType="HISManagerModel.SYS_ROLEACTIONMAPPING" />
+          <EntitySet Name="SYS_ROLE" EntityType="HISManagerModel.SYS_ROLE" />
+          <EntitySet Name="SYS_ITEMMENU" EntityType="HISManagerModel.SYS_ITEMMENU" />
+        </EntityContainer>
+        <EntityType Name="SYS_USERROLEMAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLEID" Type="Int32" />
+          <Property Name="USERID" Type="Int32" />
+          <Property Name="CREATEDATE" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SYS_Action">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="DESC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionMenu" Type="Int32" />
+          <Property Name="CREATETIME" Type="DateTime" Precision="3" />
+          <Property Name="Flag" Type="Int32" />
+          <Property Name="Type" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SYS_ROLEACTIONMAPPING">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLEID" Type="Int32" />
+          <Property Name="ACTIONID" Type="Int32" />
+          <Property Name="CREATETIME" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SYS_ROLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ROLENAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STATE" Type="Byte" />
+          <Property Name="ROLENUM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CREATETIME" Type="DateTime" Precision="3" />
+          <Property Name="FLAG" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SYS_ITEMMENU">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuNum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="TEXT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="URL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ICON" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CREATETIME" Type="DateTime" Precision="3" />
+          <Property Name="STATE" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CHECKED" Type="Boolean" />
+          <Property Name="SEQ" Type="Int32" />
+          <Property Name="ActionNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ORDERINDEX" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HISManagerModelStoreContainer" CdmEntityContainer="HISDataEntities">
+          <EntitySetMapping Name="SYS_USERINFO">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_USERINFO">
+              <MappingFragment StoreEntitySet="SYS_USERINFO">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="AGE" ColumnName="AGE" />
+                <ScalarProperty Name="SEX" ColumnName="SEX" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_USERROLEMAPPING">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_USERROLEMAPPING">
+              <MappingFragment StoreEntitySet="SYS_USERROLEMAPPING">
+                <ScalarProperty Name="CREATEDATE" ColumnName="CREATEDATE" />
+                <ScalarProperty Name="USERID" ColumnName="USERID" />
+                <ScalarProperty Name="ROLEID" ColumnName="ROLEID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_Action">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_Action">
+              <MappingFragment StoreEntitySet="SYS_Action">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="CREATETIME" ColumnName="CREATETIME" />
+                <ScalarProperty Name="ActionMenu" ColumnName="ActionMenu" />
+                <ScalarProperty Name="DESC" ColumnName="DESC" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ActionNum" ColumnName="ActionNum" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ROLEACTIONMAPPING">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_ROLEACTIONMAPPING">
+              <MappingFragment StoreEntitySet="SYS_ROLEACTIONMAPPING">
+                <ScalarProperty Name="CREATETIME" ColumnName="CREATETIME" />
+                <ScalarProperty Name="ACTIONID" ColumnName="ACTIONID" />
+                <ScalarProperty Name="ROLEID" ColumnName="ROLEID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ROLE">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_ROLE">
+              <MappingFragment StoreEntitySet="SYS_ROLE">
+                <ScalarProperty Name="FLAG" ColumnName="FLAG" />
+                <ScalarProperty Name="CREATETIME" ColumnName="CREATETIME" />
+                <ScalarProperty Name="ROLENUM" ColumnName="ROLENUM" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="ROLENAME" ColumnName="ROLENAME" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_ITEMMENU">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_ITEMMENU">
+              <MappingFragment StoreEntitySet="SYS_ITEMMENU">
+                <ScalarProperty Name="ORDERINDEX" ColumnName="ORDERINDEX" />
+                <ScalarProperty Name="ActionNum" ColumnName="ActionNum" />
+                <ScalarProperty Name="SEQ" ColumnName="SEQ" />
+                <ScalarProperty Name="CHECKED" ColumnName="CHECKED" />
+                <ScalarProperty Name="STATE" ColumnName="STATE" />
+                <ScalarProperty Name="CREATETIME" ColumnName="CREATETIME" />
+                <ScalarProperty Name="ICON" ColumnName="ICON" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="TEXT" ColumnName="TEXT" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="MenuNum" ColumnName="MenuNum" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

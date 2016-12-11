@@ -1,0 +1,94 @@
+﻿
+@{
+    Layout = null;
+}
+@model SP.Models.SYS_USERINFO
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>主页面</title>
+
+</head>
+<body>
+    <!--主界面头部-->
+    <div data-options="region:'north',border:false" class="dnorth">
+        <div class="dnleft">
+            <h2>
+                医疗管理后台
+            </h2>
+        </div>
+        <div class="dncenter">
+            @{
+                var mainMenu = ViewBag.MainMenu as List<SP.Models.SYS_ITEMMENU>;
+                if (mainMenu != null)
+                {
+                    foreach (var item in mainMenu)
+                    {
+                        int id = item.ID;
+                        string iconCls = item.ICON;
+                        string menuName = item.TEXT;
+                        <a href="javascript:void(0);" id="@id" class="easyui-linkbutton"
+                           data-options="plain: true,iconCls:'@iconCls',iconAlign: 'top',onClick:function(){loadTree('@id'); }">@menuName</a>
+                    }
+                }
+            }
+        </div>
+        <div class="dnright">
+            <div class="dnrleft">
+                当前日期： <b>
+                    @DateTime.Today.ToString("yyyy-MM-dd dddd", new System.Globalization.CultureInfo("zh-CN"))
+                    <span class="stime"></span>
+                </b>
+            </div>
+            <div class="dnrright">
+                @{
+                    if (Model != null)
+                    {
+                        <a href="javascript:void(0);" class="dnra" id="lbadmin">@Model.LoginName</a>
+                        <a href="javascript:void(0);" id="lblogout">退出</a>
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+    <!--主界面底部-->
+    <div data-options="region:'south',border:false" class="dsouth">
+        医疗betaV1.0 ©管理平台
+    </div>
+    <!--主界面左侧-->
+    <div data-options="region:'west',title:'导航菜单',split:true,href:'/Home/Left'" style="width: 240px;">
+    </div>
+    <!--主界面中间-->
+    <div data-options="region:'center',href:'/Home/Center'" class="dcenter">
+    </div>
+    <!--控制面板Menu-->
+    <div id="kzmbMenu">
+    </div>
+    <!--login dialog-->
+    <div id="loginDialog" title="用户登录">
+        <form id="loginForm" method="post">
+            <table>
+                <tr>
+                    <td class="td1">
+                        用户名：
+                    </td>
+                    <td>
+                        <input name="uname" type="text" value="admin" class="easyui-validatebox" data-options="required:true,validType:['length[0,8]']" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        密&nbsp;&nbsp;码：
+                    </td>
+                    <td>
+                        <input name="upass" type="password" value="Ebooom9966" class="easyui-validatebox" data-options="required:true,validType:['length[5,15]']" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
