@@ -1,0 +1,359 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section queryform{
+    <div style="padding:8px">
+        <span>设置角色权限：选择角色，设置该角色拥有的权限。</span>
+    </div>
+}
+
+
+<div class="easyui-panel" style="height:100%;padding:1px" data-options="border:false">
+    <div class="easyui-layout" data-options="fit:true">
+        <div class="easyui-panel" data-options="region:'west'" style="width:50%;padding:3px" title="角色">
+            <div style="height:30px">
+                <label for="roleName">角色名称:</label>
+                <input class="easyui-textbox" type="text" id="roleName" name="useroleNamerName" style="width: 115px" />
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="roleQuery">查询</a>
+            </div>
+            <div style="height:510px">
+                <table id="roleGrid"></table>
+            </div>
+        </div>
+        <div class="easyui-panel" data-options="region:'east'" style="width:49%;padding:3px" title="权限">
+            <div style="height:540px;overflow:hidden">
+                <table id="actionGrid"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog"></div>
+<script type="text/javascript">
+    // 设置角色所拥有的的权限
+    $(document).ready(function () {
+
+        //初始化RoleGrid
+        InitRoleToolbar();
+        //初始化权限grid
+        InitActionToolbar();
+
+        $("#roleQuery").click(function () {
+            $("#roleGrid").datagrid("load", {
+                name: $("#roleName").val()
+            });
+        });
+
+        $("#actionQuery").click(function () {
+            QueryActionGrid();
+        });
+    });
+
+    //根据权限加载角色工具栏
+    function InitRoleToolbar() {
+        $.ajax({
+            url: "/UserRole/GetUserButtonAction",
+            data: { actionNum: "RT060201" }, //该菜单对应的权限编码
+            dataType: "json",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "获取权限失败 " + returnData.message);
+                    return;
+                }
+
+                var toolbar = [];
+                $.each(returnData.data, function (index, item) {
+                    var actionBar = {
+                        id: item.ActionNum,
+                        text: item.ActionName
+                    };
+                    //新增
+                    if (item.ActionNum == "RT06020101") { //新增
+                        actionBar.iconCls = "icon-add",
+                        actionBar.handler = function () {
+                            ShowRoleDialog("add");
+                        }
+                    } else if (item.ActionNum == "RT06020102") { //编辑
+                        actionBar.iconCls = "icon-edit",
+                        actionBar.handler = function () {
+                            ShowRoleDialog("edit");
+                        }
+                    } else { return true; }
+                    toolbar.push(actionBar);
+                })
+                //根据权限加载按钮
+                InitRoleGrid(toolbar);
+            }
+        });
+    }
+    function InitRoleGrid(toolbar) {
+        var queryData = {
+            name: $("#roleName").val()
+        };
+
+        $('#roleGrid').datagrid({             //定位到Table标签，Table标签的ID是grid
+            url: '/Role/GetAppRoleList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            singleSelect: true,  //选中行唯一
+            method: 'post',
+            idField: 'ID',
+            queryParams: queryData,  //异步查询的参数
+            columns: [[
+                          { title: "Id", field: "ID", width: 95, hidden: true },
+                          { title: "角色名称", field: "RoleName", width: 95 },
+                          { title: "角色编码", field: "RoleNum", width: 95 },
+                          { title: "角色说明", field: "Disc" },
+                          { title: "创建时间", field: "CreateTime", width: 105 }
+            ]],
+            toolbar: toolbar,
+            onSelect: function (index, row) {
+                QueryActionGrid();
+            }
+        })
+    }
+    //编辑角色弹窗
+    function ShowRoleDialog(action) {
+
+        var title = "新增角色";
+        var roleID = 0;
+        if (action == "edit") {
+            title = "编辑角色";
+            var selectedRows = $("#roleGrid").datagrid("getSelected");
+            if (!selectedRows) {
+                $.messager.alert("提示", "请选择需要编辑的角色");
+                return;
+            }
+            roleID = selectedRows.ID;
+        }
+
+        var href = "/Role/Dialog?Id=" + roleID;
+
+        $("#dialog").dialog({
+            title: title,
+            width: 350,
+            height: 230,
+            closed: false,
+            cache: false,
+            href: href,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SaveRole();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+
+    function SaveRole() {
+        //保存按钮
+        $("#dialogForm").form("submit", {
+            url: "/Role/SaveRole",
+            success: function (data) {
+                //form 提交返回的是字符串，需要转换成json
+                var returnData = $.parseJSON(data)
+                if (returnData && returnData.result == 'ok') {
+                    //$.messager.alert("提示", returnData.message);
+
+                    $.messager.alert("提示", returnData.message);
+                    $("#dialog").dialog("close");
+
+
+                    $("#roleGrid").datagrid("load", {
+                        name: $("#roleName").val()
+                    });
+
+                }
+                else {
+                    $.messager.alert("提示", returnData.message);
+                }
+            }
+        });
+    }
+
+    //根据权限获取设置权限工具栏
+    function InitActionToolbar() {
+
+        //    var toolbar = [{
+        //        id: 'btnAdd',
+        //        text: '设置权限',
+        //        iconCls: 'icon-edit',
+        //        handler: function () {
+        //            SetAction();
+        //        }
+        //    }]
+        //    InitActionGrid(toolbar);
+        //    return;
+
+        $.ajax({
+            url: "/UserRole/GetUserButtonAction",
+            data: { actionNum: "RT060302" }, //该菜单对应的权限编码
+            dataType: "json",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "获取权限失败 " + returnData.message);
+                    return;
+                }
+
+                var toolbar = [];
+                $.each(returnData.data, function (index, item) {
+                    var actionBar = {
+                        id: item.ActionNum,
+                        text: item.ActionName
+                    };
+                    //新增
+                    if (item.ActionNum == "RT06030201") { //新增
+                        actionBar.iconCls = "icon-add",
+                        actionBar.handler = function () {
+                            SetAction();
+                        }
+                    } else { return true; }
+                    toolbar.push(actionBar);
+                })
+                //根据权限加载按钮
+                InitActionGrid(toolbar);
+            }
+        });
+    }
+
+    //加载角色管理用户
+    function InitActionGrid(toolbar) {
+        var queryData = {
+            roleid: "-1"
+        };
+
+        $('#actionGrid').treegrid({             //定位到Table标签，Table标签的ID是grid
+            url: '/RoleAction/GetAppRoleActionList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            singleSelect: true,  //选中行唯一
+            method: 'post',
+            idField: 'ID',
+            treeField: 'ActionName',
+            queryParams: queryData,  //异步查询的参数
+            columns: [[
+                          { title: "Id", field: "ID", width: 95, hidden: true },
+                          { title: "权限名称", field: "ActionName" },
+                          { title: "权限编码", field: "ActionNum", width: 95 },
+                          { title: "权限类型", field: "Type", hidden: true },
+                          { title: "权限类型", field: "TypeName", width: 95 },
+                          { title: "权限说明", field: "Disc" }
+            ]],
+            toolbar: toolbar
+
+        })
+    }
+
+    //查询权限，重新生成grid
+    function QueryActionGrid() {
+        var selectRow = $("#roleGrid").datagrid("getSelected");
+        if (!selectRow) {
+            $.messager.alert("提示", "请选择角色");
+            return;
+        }
+
+        $("#actionGrid").treegrid("load", {
+            roleid: selectRow.ID
+        });
+    }
+
+    // 为角色添加权限
+    function SetAction() {
+        var selectRole = $("#roleGrid").datagrid("getSelected");
+        if (!selectRole) {
+            $.messager.alert("提示", "请先选择角色");
+            return;
+        }
+
+        var roleid = selectRole.ID;
+        var href = "/Action/SetRoleAction?roleid=" + roleid;
+
+        $("#dialog").dialog({
+            title: "选择权限",
+            width: 550,
+            height: 410,
+            closed: false,
+            cache: false,
+            href: href,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SaveRoleAction();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+    //保存用户权限
+    function SaveRoleAction() {
+
+        //获取所有选择的节点checked、indeterminate、unchecked
+        var selection = $('#dlgActionGrid').tree('getChecked', ['checked', 'indeterminate']);
+        var roleid = $("#dlgRoleId").val();
+
+        var actionids = [];
+        $.each(selection, function (index, item) {
+            actionids.push(item.id);
+        });
+
+        var param = {
+            roleid: roleid,
+            actionids: actionids.join(',')
+        };
+        $.ajax({
+            url: "/RoleAction/SaveRoleAction",
+            data: param,
+            dataType: "json",
+            type: "post",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "设置角色权限失败 " + returnData.message);
+                    return;
+                }
+                $("#dialog").dialog("close");
+
+                $("#actionGrid").treegrid("load", {
+                    roleid: roleid
+                });
+            },
+            error: function (returnData) {
+                $.messager.alert("提示", "设置角色权限失败 ");
+            }
+        });
+
+    }
+
+</script>

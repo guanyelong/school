@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model SP.Models.SYS_ITEMMENU
+<script src="~/Scripts/Easyui/easyui-validate-extend.js"></script>
+<form id="dialogForm" method="post" action="#">
+
+    <input name="ID" type="hidden" value="@Model.ID" />
+    <table style="width: 100%; text-align: center">
+        <tr>
+            <td>
+                <label for="MenuNum">
+                    菜单编码:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" style="width:200px" name="MenuNum" readonly="readonly" data-options="required:true,missingMessage:'菜单编码不能为空'" value="@Model.MenuNum" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Text">
+                    菜单名称:
+                </label>
+            </td>
+            <td>
+                <input id="Text" class="easyui-textbox" style="width:200px" type="text" name="Text" data-options="required:true,missingMessage:'菜单名称不能为空',validType:['chinese','length[2,20]']" value="@Model.TEXT" />
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label for="ParentID">
+                    上级菜单:
+                </label>
+            </td>
+            <td>
+                <input id="ParentId" class="easyui-combotree" style="width:200px" type="text" name="ParentID" data-options="required:true,missingMessage:'上级菜单不能为空'" value="@Model.ParentID" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Url">
+                    Url:
+                </label>
+            </td>
+            <td>
+                <input id="Url" class="easyui-textbox" style="width:200px" type="text" name="Url" data-options="validType:['unnormal','length[2,50]']" value="@Model.URL" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Disc">
+                    排序:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" style="width:200px" name="OrderIndex" data-options="required:true,missingMessage:'排序编码不能为空',validType:'integer'" value="@Model.ORDERINDEX" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="IconCls">
+                    IconCls:
+                </label>
+            </td>
+            <td>
+                <input id="IconCls" class="easyui-textbox" style="width:200px" type="text" name="IconCls" data-options="validType:['unnormal','length[2,10]']" value="@Model.ICON" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Disc">
+                    菜单描述:
+                </label>
+            </td>
+            <td>
+                @*<input class="easyui-textbox" style="height:60px;width:200px" name="Disc" data-options="multiline:true,required:true,missingMessage:'菜单描述不能为空',validType:['unnormal','length[2,100]']" style="height:60px" value="@Model.Disc" />*@
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        InitMenuCombo();
+    });
+
+    //绑定上级菜单
+    function InitMenuCombo() {
+        var departUrl = "/Menu/GetMenuComboTree";
+
+        $("#ParentId").combotree({
+            url: departUrl,
+            editable: false
+        });
+    }
+</script>

@@ -17,4 +17,6 @@ namespace SP.Models.HIS
         public int Type { get; set; }
 
     }
+
+   
 }

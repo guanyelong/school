@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "设置角色权限";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model SP.Models.SYS_ROLE
+<!--引用easyui extend-->
+<input id="dlgRoleId" type="hidden" value="@Model.ID" />
+
+<div style="padding:1px; height:100%">
+    <ul id="dlgActionGrid" class="easyui-tree"></ul>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var roleid = $("#dlgRoleId").val();
+
+        InitDialogActionGrid();
+    });
+
+    //初始化grid
+    function InitDialogActionGrid() {
+        var queryData = {
+            roleid: $("#dlgRoleId").val()
+        };
+
+        $('#dlgActionGrid').tree({   //定位到Table标签，Table标签的ID是grid
+            url: '/RoleAction/GetRoleActionTreeList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            checkbox:true,
+            cascadeCheck:true,
+            treeField:"ActionName",
+            queryParams: queryData //异步查询的参数
+        });
+    }
+</script>

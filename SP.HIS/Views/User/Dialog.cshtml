@@ -1,0 +1,150 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+
+@model SP.Models.SYS_USERINFO
+<form id="dialogForm" method="post">
+    <input name="ID" type="hidden" value="@Model.ID" />
+    <table style="width: 100%; text-align: center">
+        <tr>
+            <td>
+                <label for="name">
+                    用户名:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="LoginName" data-options="required:true,missingMessage:'用户名不能为空',validType:'LoginName'" value="@Model.LoginName" />
+            </td>
+            <td>
+                <label for="name">
+                    真实姓名:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="Name" data-options="required:true,missingMessage:'真实姓名不能为空',validType:['chinese','length[2,4]']" value="@Model.NAME" />
+            </td>
+        </tr>
+        @{
+
+            if (@Model.ID > 0) { }
+            else
+            {
+                <tr>
+                    <td>
+                        <label for="Password">
+                            密码:
+                        </label>
+                    </td>
+                    <td>
+                        <input id="password1" class="easyui-textbox" type="password" name="Password" data-options="required:true,missingMessage:'密码不能为空',validType:'length[6,30]'" value="@Model.PASSWORD" />
+                    </td>
+                    <td>
+                        <label for="PasswordTwo">
+                            重复密码:
+                        </label>
+                    </td>
+                    <td>
+                        <input id="password2" class="easyui-textbox" type="password" name="PasswordTwo" data-options="required:true,missingMessage:'重复密码不能为空',validType:'length[6,30]'" value="@Model.PASSWORD" />
+                    </td>
+                </tr>
+            }
+
+        }
+        <tr>
+            <td>
+                <label for="DepartmentID">
+                    所在部门:
+                </label>
+            </td>
+            <td>
+                <input id="appDepartment" class="easyui-textbox" type="text" name="DepartmentID" data-options="required:true,missingMessage:'用户名不能为空'" value="@Model.DepartmentID" />
+            </td>
+            <td>
+                <label for="Position">
+                    职位:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="Position" data-options="required:true,missingMessage:'职位不能为空',validType:['chinese','length[2,6]']" value="@Model.Position" maxLength="6" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Tel">
+                    座机:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="Tel" data-options="required:true,missingMessage:'手机不能为空',validType:'phone'" value="@Model.Tel" />
+            </td>
+            <td>
+                <label for="Email">
+                    邮箱:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="Email" data-options="required:true,validType:['email','length[2,50]'],missingMessage:'邮箱格式不正确'" value="@Model.Email" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="QQ">
+                    QQ:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="QQ" data-options="required:true,missingMessage:'QQ不能为空',validType:'qq'" value="@Model.QQ" />
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label for="HeadImg">
+                    头像:
+                </label>
+            </td>
+            <td>
+                <input id="headImg" type="hidden" name="HeadImg" value="@Model.HeadImg" />
+                <div id="uploadFile" style="text-align:left;padding-left:20px">
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+<link href="~/Scripts/WebUploader/webuploader.css" rel="stylesheet" />
+<script src="~/Scripts/Easyui/easyui-validate-extend.js"></script>
+<script src="~/Scripts/WebUploader/importFile.js"></script>
+<script src="~/Scripts/WebUploader/webuploader.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        InitDepartment();
+    });
+
+
+    //绑定部门数据
+    function InitDepartment() {
+        var departUrl = "/Department/GetAppDeparmtTree";
+        $("#appDepartment").combotree({
+            url: departUrl
+        });
+    }
+
+    $("#uploadFile").uploadFile({
+        title: "",
+        width: 80, //生成缩略图的文件大小
+        height: 80, //生成缩略图的文件大小
+        defaultFileSrc: "@Model.HeadImg",
+        singleFile: true,
+        uploadSucess: function (file, response, uploader) {
+
+            $("#headImg").val(response.filePath);
+        },
+        deleteFile: function (fileName, filePath) {
+            $("#headImg").val("");
+        }
+    });
+
+</script>

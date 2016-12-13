@@ -198,14 +198,23 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActionController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\RoleActionController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserRoleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EasyuiTreeNode.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JTreeCommon.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -217,6 +226,7 @@
     <Content Include="Content\Images\Login\8bcLQqF.png" />
     <Content Include="Content\Images\Login\password.png" />
     <Content Include="Content\Images\Login\people.png" />
+    <Content Include="Content\JECommon.css" />
     <Content Include="DLL\Newtonsoft.Json.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -1387,8 +1397,20 @@
     <Content Include="Scripts\JTabs.js" />
     <Content Include="Scripts\JTree.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PortalCommon.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\WebUploader\importFile.js" />
+    <Content Include="Scripts\WebUploader\Uploader.swf" />
+    <Content Include="Scripts\WebUploader\webuploader.css" />
+    <Content Include="Scripts\WebUploader\webuploader.custom.min.js" />
+    <Content Include="Scripts\WebUploader\webuploader.fis.js" />
+    <Content Include="Scripts\WebUploader\webuploader.flashonly.min.js" />
+    <Content Include="Scripts\WebUploader\webuploader.html5only.min.js" />
+    <Content Include="Scripts\WebUploader\webuploader.min.js" />
+    <Content Include="Scripts\WebUploader\webuploader.noimage.min.js" />
+    <Content Include="Scripts\WebUploader\webuploader.nolog.min.js" />
+    <Content Include="Scripts\WebUploader\webuploader.withoutimage.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1433,10 +1455,30 @@
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Home\Price.cshtml" />
     <Content Include="Views\Home\Patient.cshtml" />
+    <Content Include="Views\Action\Index.cshtml" />
+    <Content Include="Views\Action\Dialog.cshtml" />
+    <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="Views\Menu\Dialog.cshtml" />
+    <Content Include="Views\Action\RoleAction.cshtml" />
+    <Content Include="Views\Action\SetRoleAction.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Role\Dialog.cshtml" />
+    <Content Include="Views\Role\RoleUser.cshtml" />
+    <Content Include="Views\Role\SetUserRole.cshtml" />
+    <Content Include="Views\User\Dialog.cshtml" />
+    <Content Include="Scripts\WebUploader\README.md" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\ChangePasswordDlg.cshtml" />
+    <Content Include="Views\Shared\Type_Layout.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Department\Dialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\WebUploader\images\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\RoleAction\" />
+    <Folder Include="Views\UserRole\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1450,6 +1492,10 @@
     <ProjectReference Include="..\SP.Business\SP.Business.csproj">
       <Project>{0a6852cc-b2d8-41de-9c87-d21de424e983}</Project>
       <Name>SP.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SP.Common\SP.Common.csproj">
+      <Project>{30709f29-6d73-4d80-9493-0917d0704d72}</Project>
+      <Name>SP.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\SP.Models\SP.Models.csproj">
       <Project>{0c82914f-aed2-444a-ac99-2eb170fc2713}</Project>

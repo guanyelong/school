@@ -19,6 +19,17 @@
           <Property Name="Flag" Type="int" />
           <Property Name="Type" Type="int" />
         </EntityType>
+        <EntityType Name="SYS_Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="Flag" Type="int" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="ParentID" Type="int" />
+        </EntityType>
         <EntityType Name="SYS_ITEMMENU">
           <Key>
             <PropertyRef Name="ID" />
@@ -68,6 +79,13 @@
           <Property Name="AGE" Type="int" />
           <Property Name="SEX" Type="bigint" />
           <Property Name="PHONE" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="50" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" />
+          <Property Name="HeadImg" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="SYS_USERROLEMAPPING">
           <Key>
@@ -80,6 +98,7 @@
         </EntityType>
         <EntityContainer Name="HISManagerModelStoreContainer">
           <EntitySet Name="SYS_Action" EntityType="Self.SYS_Action" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYS_Department" EntityType="Self.SYS_Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYS_ITEMMENU" EntityType="Self.SYS_ITEMMENU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYS_ROLE" EntityType="Self.SYS_ROLE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYS_ROLEACTIONMAPPING" EntityType="Self.SYS_ROLEACTIONMAPPING" Schema="dbo" store:Type="Tables" />
@@ -90,26 +109,14 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HISManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="SYS_USERINFO">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="GUID" Type="Guid" />
-          <Property Name="LoginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AGE" Type="Int32" />
-          <Property Name="SEX" Type="Int64" />
-          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityContainer Name="HISDataEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="SYS_USERINFO" EntityType="Self.SYS_USERINFO" />
           <EntitySet Name="SYS_USERROLEMAPPING" EntityType="HISManagerModel.SYS_USERROLEMAPPING" />
           <EntitySet Name="SYS_Action" EntityType="HISManagerModel.SYS_Action" />
           <EntitySet Name="SYS_ROLEACTIONMAPPING" EntityType="HISManagerModel.SYS_ROLEACTIONMAPPING" />
           <EntitySet Name="SYS_ROLE" EntityType="HISManagerModel.SYS_ROLE" />
           <EntitySet Name="SYS_ITEMMENU" EntityType="HISManagerModel.SYS_ITEMMENU" />
+          <EntitySet Name="SYS_Department" EntityType="HISManagerModel.SYS_Department" />
+          <EntitySet Name="SYS_USERINFO" EntityType="HISManagerModel.SYS_USERINFO" />
         </EntityContainer>
         <EntityType Name="SYS_USERROLEMAPPING">
           <Key>
@@ -171,26 +178,43 @@
           <Property Name="ActionNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ORDERINDEX" Type="Int32" />
         </EntityType>
+        <EntityType Name="SYS_Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentNum" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Flag" Type="Int32" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="ParentID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SYS_USERINFO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GUID" Type="Guid" />
+          <Property Name="LoginName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PASSWORD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AGE" Type="Int32" />
+          <Property Name="SEX" Type="Int64" />
+          <Property Name="PHONE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HeadImg" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HISManagerModelStoreContainer" CdmEntityContainer="HISDataEntities">
-          <EntitySetMapping Name="SYS_USERINFO">
-            <EntityTypeMapping TypeName="HISManagerModel.SYS_USERINFO">
-              <MappingFragment StoreEntitySet="SYS_USERINFO">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="GUID" ColumnName="GUID" />
-                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
-                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
-                <ScalarProperty Name="NAME" ColumnName="NAME" />
-                <ScalarProperty Name="AGE" ColumnName="AGE" />
-                <ScalarProperty Name="SEX" ColumnName="SEX" />
-                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SYS_USERROLEMAPPING">
             <EntityTypeMapping TypeName="HISManagerModel.SYS_USERROLEMAPPING">
               <MappingFragment StoreEntitySet="SYS_USERROLEMAPPING">
@@ -252,6 +276,39 @@
                 <ScalarProperty Name="TEXT" ColumnName="TEXT" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="MenuNum" ColumnName="MenuNum" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_Department">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_Department">
+              <MappingFragment StoreEntitySet="SYS_Department">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Flag" ColumnName="Flag" />
+                <ScalarProperty Name="DepartmentNum" ColumnName="DepartmentNum" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYS_USERINFO">
+            <EntityTypeMapping TypeName="HISManagerModel.SYS_USERINFO">
+              <MappingFragment StoreEntitySet="SYS_USERINFO">
+                <ScalarProperty Name="HeadImg" ColumnName="HeadImg" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+                <ScalarProperty Name="SEX" ColumnName="SEX" />
+                <ScalarProperty Name="AGE" ColumnName="AGE" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="GUID" ColumnName="GUID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -14,7 +14,7 @@ namespace SP.HIS.Controllers
         {
             if (AdminSystemInfo.CurrentUser == null)
             {
-                FormsAuthentication.RedirectToLoginPage();
+                //FormsAuthentication.RedirectToLoginPage();
             }
         }
     }

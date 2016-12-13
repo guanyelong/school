@@ -1,0 +1,225 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section queryform
+{
+    <div style="padding:8px">
+        <span>设置菜单权限时，将菜单权限与1、2、3级菜单做一一对应。</span>
+    </div>
+}
+<div style="padding-left: 2px; padding-right: 2px; height: 100%;">
+    <table id="grid"></table>
+</div>
+
+<div id="dialog">
+</div>
+<script type="text/javascript">
+    /* 权限管理Javascript文件 */
+    $(document).ready(function () {
+        //加载Grid
+        InitToolbar();
+    });
+    function InitToolbar() {
+        $.ajax({
+            url: "/UserRole/GetUserButtonAction",
+            data: { actionNum: "RT060301" }, //该菜单对应的权限编码
+            dataType: "json",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "获取权限失败 " + returnData.message);
+                    return;
+                }
+
+                var toolbar = [];
+                $.each(returnData.data, function (index, item) {
+                    var actionBar = {
+                        id: item.ActionNum,
+                        text: item.ActionName
+                    };
+                    //新增
+                    if (item.ActionNum == "RT06030101") { //新增
+                        actionBar.iconCls = "icon-add",
+                        actionBar.handler = function () {
+                            ShowEditOrViewDialog('add');
+                        }
+                    } else if (item.ActionNum == "RT06030102") { //编辑
+                        actionBar.iconCls = "icon-edit",
+                        actionBar.handler = function () {
+                            ShowEditOrViewDialog('edit');
+                        }
+                    } else if (item.ActionNum == "RT06030103") { //删除
+                        actionBar.iconCls = "icon-remove",
+                        actionBar.handler = function () {
+                            DeleteSelectRow();
+                        }
+                    } else if (item.ActionNum == "RT06030104") { //刷新
+                        actionBar.iconCls = "icon-reload",
+                        actionBar.handler = function () {
+                            $("#grid").treegrid("reload");
+                        }
+                    }
+                    toolbar.push(actionBar);
+                })
+                //根据权限加载按钮
+                InitGrid(toolbar);
+            }
+        });
+    }
+    //装载Grid
+    function InitGrid(toolbar) {
+
+        $('#grid').treegrid({   //定位到Table标签，Table标签的ID是grid
+            url: '/Action/GetActionGridTreeList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            singleSelect: true,  //选中行唯一
+            method: 'post',
+            idField: 'ID',
+            treeField: "ActionName",
+            columns: [[
+                          { title: "Id", field: "ID", width: 95, hidden: true },
+                          { title: "权限名称", field: "ActionName", width: 95 },
+                          { title: "权限编码", field: "ActionNum", width: 95 },
+                          { title: "权限说明", field: "Disc", width: 95 },
+                          { title: "权限类型", field: "Type", width: 95, hidden: true },
+                          { title: "权限类型", field: "TypeName", width: 95 },
+                          { title: "创建时间", field: "CreateTime", width: 105 }
+            ]],
+            toolbar: toolbar
+        })
+    };
+    //显示新增编辑页面
+    function ShowEditOrViewDialog(action) {
+
+        var title = "新增权限";
+
+        var selectedRows = $("#grid").treegrid("getSelected");
+        var actionID = 0;
+        var parentid = 0;
+        if (action == "edit") {
+            title = "编辑权限";
+            if (!selectedRows) {
+                $.messager.alert("提示", "请选择需要编辑的权限");
+                return;
+            }
+            actionID = selectedRows.ID;
+        }
+
+        var href = "/Action/Dialog?Id=" + actionID;//  + "&parentid=" + parentid;
+        $("#dialog").dialog({
+            title: title,
+            width: 350,
+            height: 310,
+            closed: false,
+            cache: false,
+            href: href,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SaveAction();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+
+    function SaveAction() {
+
+        //验证
+        if (!validate()) {
+            return;
+        }
+        //保存按钮
+        $("#dialogForm").form("submit", {
+            url: "/Action/SaveAction",
+            datatype: "json",
+            success: function (data) {
+                //form 提交返回的是字符串，需要转换成json
+                var returnData = $.parseJSON(data)
+                if (returnData && returnData.result == 'ok') {
+                    //$.messager.alert("提示", returnData.message);
+                    $("#dialog").dialog("close");
+                    $("#grid").treegrid("load");
+                }
+                else {
+                    $.messager.alert("提示", returnData.message);
+                }
+            }
+        });
+    }
+
+    //删除选中行
+    function DeleteSelectRow() {
+        var selectedRow = $("#grid").treegrid("getSelected");
+        if (!selectedRow) {
+            $.messager.alert("提示", "请选择需要删除的权限");
+            return;
+        }
+
+        //确定要删除选中
+        $.messager.confirm("删除提示", "删除权限的同时，将一同删除所有子权限,确定要删除该权限么?", function (data) {
+            if (data) {
+                var id = selectedRow.ID;
+                var deleteUrl = "/Action/DeleteAction";
+                $.ajax({
+                    url: deleteUrl,
+                    data: { actionid: id },
+                    dataType: "json",
+                    success: function (returnData) {
+                        //failed
+                        if (returnData.result == "error") {
+                            $.messager.alert("提示", "删除错误 " + returnData.message);
+                            $("#grid").treegrid("load");
+                            return;
+                        }
+                        $("#grid").treegrid("load");
+                    },
+                    error: function (returnData) {
+                        $.messager.alert("提示", "删除失败 ");
+                    }
+
+                });
+            }
+        });
+
+    }
+
+    //数据验证
+    function validate() {
+        var actionType = $("#actionType").combobox("getValue");
+
+
+        //如果操作权限为按钮时，必须选择上级菜单
+        if (actionType == 0) {
+            var parentId = $("#ParentID").combotree("getValue");
+            if (parentId < 1) {
+                $.messager.alert("提示", "按钮权限需要选择其上级权限 ");
+                return false;
+            }
+        }
+        else {
+            //为菜单权限时，必须选择对应的菜单
+            var menuId = $("#menuId").combotree("getValue");
+            if (!menuId || menuId == "") {
+                $.messager.alert("提示", "请选择关联菜单 ");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

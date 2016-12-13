@@ -22,5 +22,12 @@ namespace SP.Models
         public Nullable<int> AGE { get; set; }
         public Nullable<long> SEX { get; set; }
         public string PHONE { get; set; }
+        public Nullable<int> DepartmentID { get; set; }
+        public Nullable<System.DateTime> CreateTime { get; set; }
+        public string Email { get; set; }
+        public string QQ { get; set; }
+        public string Tel { get; set; }
+        public string Position { get; set; }
+        public string HeadImg { get; set; }
     }
 }

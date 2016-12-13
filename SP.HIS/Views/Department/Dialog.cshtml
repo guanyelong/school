@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "部门编辑";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model SP.Models.SYS_Department
+<form id="dialogForm" method="post" action="#">
+
+    <input name="ID" type="hidden" value="@Model.ID" />
+    <input name="Flag" type="hidden" value="@Model.Flag" />
+    <table style="width: 100%; text-align: center">
+        <tr>
+            <td>
+                <label for="DepartmentNum">
+                    部门编码:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="DepartmentNum" readonly="readonly" data-options="required:true,missingMessage:'部门编码不能为空'" value="@Model.DepartmentNum" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Department">
+                    部门名称:
+                </label>
+            </td>
+            <td>
+                <input id="Department" class="easyui-textbox" type="text" name="Department" data-options="required:true,missingMessage:'部门名称不能为空',validType:['chinese','length[2,20]']" value="@Model.Department" />
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label for="ParentID">
+                    上级部门:
+                </label>
+            </td>
+            <td>
+                <input id="ParentId" class="easyui-textbox" type="text" name="ParentID" data-options="required:true,missingMessage:'上级部门不能为空'" value="@Model.ParentID" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Disc">
+                    部门描述:
+                </label>
+            </td>
+            <td>
+                @*<input class="easyui-textbox" name="Disc" data-options="multiline:true,required:true,missingMessage:'部门描述不能为空',validType:['unnormal','length[2,200]']" style="height:60px" value="@Model.Disc" />*@
+            </td>
+        </tr>
+    </table>
+</form>
+<script src="~/Scripts/Easyui/easyui-validate-extend.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        InitDepartment();
+    });
+
+    //绑定部门数据
+    function InitDepartment() {
+        var departUrl = "/Department/GetAppDeparmtTree";
+
+        $("#ParentId").combotree({
+            url: departUrl
+        });
+    }
+</script>

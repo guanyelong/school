@@ -1,0 +1,358 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section queryform
+{
+    <form id="appUserForm">
+
+        <label for="LoginName">
+            用户名称:
+        </label>
+        <input class="easyui-textbox" type="text" id="LoginName" name="LoginName" style="width: 115px" />
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="query">查询</a>
+
+    </form>
+}
+<div style="padding-left:2px;padding-right:2px;height:100%;">
+    <table id="grid" title="用户操作"></table>
+</div>
+<div id="dialog"></div>
+<script type="text/javascript">
+    /* 系统用户管理Javascript文件 */
+    $(document).ready(function () {
+        //加载Grid,先获取按钮
+        InitToolBar();
+
+        $("#query").click(function () {
+            ReloadGrid();
+        });
+    });
+
+    //获取权限按钮
+    function InitToolBar() {
+        var toolbar = [];
+        var actionBar1 = {
+            id: "RT06010101",
+            text: "新增"
+        };
+        var actionBar2 = {
+            id: "RT06010102",
+            text: "编辑"
+        };
+        var actionBar3 = {
+            id: "RT06010103",
+            text: "删除"
+        };
+        var actionBar4 = {
+            id: "RT06010104",
+            text: "刷新"
+        };
+        var actionBar5 = {
+            id: "RT06010105",
+            text: "修改密码"
+        };
+        actionBar1.iconCls = "icon-add",
+        actionBar1.handler = function () {
+            ShowEditOrViewDialog('add');
+        }
+        actionBar2.iconCls = "icon-edit",
+        actionBar2.handler = function () {
+            ShowEditOrViewDialog('edit');
+        }
+        actionBar3.iconCls = "icon-remove",
+        actionBar3.handler = function () {
+            DeleteSelectRow();
+        }
+        actionBar4.iconCls = "icon-reload",
+        actionBar4.handler = function () {
+            $("#grid").datagrid("reload");
+        }
+        actionBar5.iconCls = "icon-edit",
+        actionBar5.handler = function () {
+            ChangePassword();
+        }
+        toolbar.push(actionBar1);
+        toolbar.push(actionBar2);
+        toolbar.push(actionBar3);
+        toolbar.push(actionBar4);
+        toolbar.push(actionBar5);
+        InitGrid(toolbar);
+    }
+
+    function InitToolBar2() {
+
+        $.ajax({
+            url: "/UserRole/GetUserButtonAction",
+            data: { actionNum: "RT060101" }, //该菜单对应的权限编码
+            dataType: "json",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "获取权限失败 " + returnData.message);
+                    return;
+                }
+
+                var toolbar = [];
+                $.each(returnData.data, function (index, item) {
+                    var actionBar = {
+                        id: item.ActionNum,
+                        text: item.ActionName
+                    };
+
+                    if (item.ActionNum == "RT06010101") { //新增
+                        actionBar.iconCls = "icon-add",
+                        actionBar.handler = function () {
+                            ShowEditOrViewDialog('add');
+                        }
+                    } else if (item.ActionNum == "RT06010102") { //编辑
+                        actionBar.iconCls = "icon-edit",
+                        actionBar.handler = function () {
+                            ShowEditOrViewDialog('edit');
+                        }
+                    } else if (item.ActionNum == "RT06010103") { //删除
+                        actionBar.iconCls = "icon-remove",
+                        actionBar.handler = function () {
+                            DeleteSelectRow();
+                        }
+                    } else if (item.ActionNum == "RT06010104") { //刷新
+                        actionBar.iconCls = "icon-reload",
+                        actionBar.handler = function () {
+                            $("#grid").datagrid("reload");
+                        }
+                    } else if (item.ActionNum == "RT06010105") { //修改密码
+                        actionBar.iconCls = "icon-edit",
+                        actionBar.handler = function () {
+                            ChangePassword();
+                        }
+                    }
+                    toolbar.push(actionBar);
+                })
+                //根据权限加载按钮
+                InitGrid(toolbar);
+            }
+        });
+
+    }
+    //装载Grid
+    function InitGrid(toolbar) {
+        var queryData = {
+            name: $("#LoginName").val()
+        };
+
+        $('#grid').datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: '/User/GetAppUserList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: '用户列表',
+            iconCls: 'icon-view',
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            singleSelect: true,  //选中行唯一
+            method: 'post',
+            idField: 'ID',
+            queryParams: queryData,  //异步查询的参数
+            columns: [[
+                          { title: "Id", field: "ID", width: 95, hidden: true },
+                          { title: "用户名", field: "LoginName", width: 95 },
+                          { title: "真实姓名", field: "NAME", width: 95 },
+                          { title: "座机", field: "Tel", width: 95 },
+                          { title: "QQ", field: "QQ", width: 95 },
+                          { title: "邮箱", field: "Email", width: 95 },
+                          { title: "职位", field: "Position", width: 95 },
+                          { title: "部门编号", field: "DepartmentID", width: 95, hidden: true },
+                          { title: "所在部门", field: "DepartmentName", width: 95 },
+    //                      { title: "头像图片", field: "HeadImg", width: 95 },
+                          { title: "创建时间", field: "CreateTime", width: 105 }
+            ]],
+            toolbar: toolbar
+        })
+    };
+
+    function ReloadGrid() {
+        var queryData = {
+            name: $("#LoginName").val()
+        };
+        $("#grid").datagrid("load", queryData);
+    }
+    //显示新增编辑页面
+    function ShowEditOrViewDialog(action) {
+
+        var title = "新增用户";
+        var href = "/User/Dialog";
+
+
+        var userId = 0;
+        if (action == "edit") {
+            title = "编辑用户";
+            var selectedRows = $("#grid").datagrid("getSelected");
+            if (!selectedRows) {
+                $.messager.alert("提示", "请选择需要编辑的用户");
+                return;
+            }
+            userId = selectedRows.ID;
+        }
+        href = href + "?Id=" + userId;
+        $("#dialog").dialog({
+            title: title,
+            width: 550,
+            height: 330,
+            closed: false,
+            cache: false,
+            href: href,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SaveUser();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+
+    function SaveUser() {
+
+        //验证
+        if (!validate()) {
+            return;
+        }
+        //保存按钮
+        $("#dialogForm").form("submit", {
+            url: "/User/SaveUser",
+            success: function (data) {
+                //form 提交返回的是字符串，需要转换成json
+                var returnData = $.parseJSON(data)
+                if (returnData && returnData.result == 'ok') {
+                    $.messager.alert("提示", returnData.message);
+                    $("#dialog").dialog("close");
+                    $("#grid").datagrid("load", {
+                        LoginName: $("#LoginName").val()
+                    });
+                }
+                else {
+                    $.messager.alert("提示", returnData.message);
+                }
+            }
+        });
+    }
+
+    //删除选中行
+    function DeleteSelectRow() {
+        var selectedRow = $("#grid").datagrid("getSelected");
+        if (!selectedRow) {
+            $.messager.alert("提示", "请选择需要删除的用户");
+            return;
+        }
+
+        //确定要删除选中
+        $.messager.confirm("删除提示", "删除用户时将同时删除用户关联的角色，是否删除?", function (data) {
+            if (data) {
+                var id = selectedRow.ID;
+                var deleteUrl = "/User/DeleteUser";
+                $.ajax({
+                    url: deleteUrl,
+                    data: { userId: id },
+                    dataType: "json",
+                    success: function (returnData) {
+                        //failed
+                        if (returnData.result == "error") {
+                            $.messager.alert("提示", "删除失败 " + returnData.message);
+                            return;
+                        }
+                        //success
+                        $.messager.alert("提示", "用户删除成功");
+                        $("#grid").datagrid("load", {
+                            LoginName: $("#LoginName").val()
+                        });
+                    },
+                    error: function (returnData) {
+                        $.messager.alert("提示", "删除失败 ");
+                    }
+
+                });
+            }
+        });
+
+    }
+    function ChangePassword() {
+        var selectedRow = $("#grid").datagrid("getSelected");
+        if (!selectedRow) {
+            $.messager.alert("提示", "请选择需要修改密码的用户");
+            return;
+        }
+
+        var userId = selectedRow.ID;
+
+        $("#dialog").dialog({
+            title: "修改密码",
+            width: 400,
+            height: 170,
+            href: "/User/ChangePasswordDlg?Id=" + userId,
+            closed: false,
+            cache: false,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SavePassword();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+    //ajax 请求保存密码
+    function SavePassword() {
+        var pwd = $("#changepwd").val();
+        var pwd1 = $("#changepwd1").val();
+        if (pwd != pwd1) {
+            $.messager.alert("提示", "两次输入密码不相同！");
+            return;
+        }
+
+        $("#changeForm").form("submit", {
+            url: "/User/ChangePassword",
+            success: function (data) {
+                var returnData = $.parseJSON(data)
+                //form 提交返回的是字符串，需要转换成json
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "修改密码失败 " + returnData.message);
+                    return;
+                }
+                //success
+                $.messager.alert("提示", "用户密码修改成功");
+                $("#dialog").dialog("close");
+            }
+        });
+    }
+
+
+    //数据验证
+    function validate() {
+
+        var password1 = $("#password1").val();
+        var password2 = $("#password2").val();
+        if (password1 != password2) {
+            $.messager.alert("提示", "两次输入密码不相同！");
+            return false;
+        }
+        return true;
+    }
+</script>

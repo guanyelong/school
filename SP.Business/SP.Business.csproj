@@ -54,11 +54,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HIS\ActionBLL.cs" />
+    <Compile Include="HIS\DepartmentBLL.cs" />
+    <Compile Include="HIS\RoleActionBLL.cs" />
     <Compile Include="HIS\RoleInfoBLL.cs" />
     <Compile Include="HIS\MenuItemBLL.cs" />
+    <Compile Include="HIS\UserInfoBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HIS\UserRoleBLL.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SP.Common\SP.Common.csproj">
+      <Project>{30709f29-6d73-4d80-9493-0917d0704d72}</Project>
+      <Name>SP.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SP.Models\SP.Models.csproj">
       <Project>{0c82914f-aed2-444a-ac99-2eb170fc2713}</Project>
       <Name>SP.Models</Name>

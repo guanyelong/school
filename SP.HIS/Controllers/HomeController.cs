@@ -1,6 +1,8 @@
 ﻿using SP.Business.HIS;
+using SP.HIS.Models;
 using SP.Models.HIS;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -76,6 +78,20 @@ namespace SP.HIS.Controllers
         }
         public ActionResult Patient() {
             return View();
+        }
+
+        [ValidateInput(false)]
+        public ActionResult LoadUserTree(string id)
+        {
+            JTreeCommon jtree = new JTreeCommon();
+            #region XML方法
+            /*
+             1.获取XML中菜单数据 转化为EasyuiTreeNode
+             2.返回给json
+             */
+            List<Hashtable> list = jtree.GetUserTreeList(id);
+            return Json(list, JsonRequestBehavior.AllowGet);
+            #endregion
         }
     }
 }

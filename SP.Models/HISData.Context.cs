@@ -25,11 +25,12 @@ namespace SP.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<SYS_USERINFO> SYS_USERINFO { get; set; }
         public virtual DbSet<SYS_USERROLEMAPPING> SYS_USERROLEMAPPING { get; set; }
         public virtual DbSet<SYS_Action> SYS_Action { get; set; }
         public virtual DbSet<SYS_ROLEACTIONMAPPING> SYS_ROLEACTIONMAPPING { get; set; }
         public virtual DbSet<SYS_ROLE> SYS_ROLE { get; set; }
         public virtual DbSet<SYS_ITEMMENU> SYS_ITEMMENU { get; set; }
+        public virtual DbSet<SYS_Department> SYS_Department { get; set; }
+        public virtual DbSet<SYS_USERINFO> SYS_USERINFO { get; set; }
     }
 }

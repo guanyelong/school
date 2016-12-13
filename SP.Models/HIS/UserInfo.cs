@@ -46,4 +46,10 @@ namespace SP.Models.HIS
         [DataType(DataType.Password)]
         public string PASSWORD { get; set; }
     }
+
+    public partial class UserItems
+    {
+
+       
+    }
 }

@@ -72,9 +72,13 @@
     <Compile Include="HIS\AdminSystemInfo.cs" />
     <Compile Include="HIS\MenuItem.cs" />
     <Compile Include="HIS\RoleInfo.cs" />
+    <Compile Include="HIS\UserExtend.cs" />
     <Compile Include="HIS\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SYS_Action.cs">
+      <DependentUpon>HISData.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SYS_Department.cs">
       <DependentUpon>HISData.tt</DependentUpon>
     </Compile>
     <Compile Include="SYS_ITEMMENU.cs">

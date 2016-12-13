@@ -1,0 +1,62 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model SP.Models.SYS_USERINFO
+<input id="dlgUserId" type="hidden" value="@Model.ID" />
+@section queryform{
+    <div style="padding: 2px">
+        <label for="roleName">角色名称:</label>
+        <input class="easyui-textbox" type="text" id="dlgRoleName" name="RoleName" style="width: 115px" />
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="dlgAllQuery"> 查询</a>
+    </div>
+}
+<div style="padding: 1px; height: 300px">
+    <table id="dlgRoleGrid"></table>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var userId = $("#dlgUserId").val();
+
+        InitDialogRoleGrid();
+
+        $("#dlgAllQuery").click(function () {
+            $('#dlgRoleGrid').datagrid("load", { name: $("#dlgRoleName").val() });
+        });
+    });
+
+    //初始化grid
+    function InitDialogRoleGrid() {
+        var queryData = {
+            name: $("#dlgRoleName").val()
+        };
+
+        $('#dlgRoleGrid').datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: '/Role/GetAppRoleList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            method: 'post',
+            idField: 'ID',
+            queryParams: queryData,  //异步查询的参数
+            columns: [[
+                      { field: "ck", checkbox: true, width: 95 },
+                      { title: "Id", field: "ID", width: 95, hidden: true },
+                      { title: "角色名称", field: "RoleName", width: 95 },
+                      { title: "角色编码", field: "RoleNum", width: 95 },
+                      { title: "角色说明", field: "Disc", width: 95 },
+                      { title: "创建时间", field: "CreateTime", width: 105 }
+                ]]
+        })
+    }
+</script>

@@ -5,12 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="bfe651f2357a48c7b631d74982eadf77" Name="Diagram1">
-        <EntityTypeShape EntityType="HISManagerModel.SYS_USERINFO" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HISManagerModel.SYS_USERROLEMAPPING" Width="1.5" PointX="9" PointY="0.875" />
         <EntityTypeShape EntityType="HISManagerModel.SYS_Action" Width="1.5" PointX="7" PointY="0.875" />
         <EntityTypeShape EntityType="HISManagerModel.SYS_ROLEACTIONMAPPING" Width="1.5" PointX="11" PointY="0.875" />
         <EntityTypeShape EntityType="HISManagerModel.SYS_ROLE" Width="1.5" PointX="5" PointY="0.75" />
         <EntityTypeShape EntityType="HISManagerModel.SYS_ITEMMENU" Width="1.5" PointX="2.875" PointY="0.75" />
+        <EntityTypeShape EntityType="HISManagerModel.SYS_Department" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="HISManagerModel.SYS_USERINFO" Width="1.5" PointX="0.875" PointY="0.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

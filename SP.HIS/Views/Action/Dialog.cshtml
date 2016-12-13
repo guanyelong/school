@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "权限编辑页面";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model SP.Models.SYS_Action
+<form id="dialogForm" method="post" action="#">
+    <input name="ID" type="hidden" value="@Model.ID" />
+    <input name="Flag" type="hidden" value="@Model.Flag" />
+    <table style="width: 100%; text-align: center">
+        <tr>
+            <td>
+                <label for="ActionNum">
+                    权限编码:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" type="text" name="ActionNum" data-options="missingMessage:'权限编码不能为空'"
+                       value="@Model.ActionNum" style="width:200px" readonly="readonly" value="自动生成" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Type">
+                    权限类型:
+                </label>
+            </td>
+            <td>
+                <input id="actionType" class="easyui-combobox" type="text" name="Type" data-options="required:true,missingMessage:'权限类型不能为空'"
+                       style="width: 200px" value="@Model.Type" />
+            </td>
+        </tr>
+        <tr id="menuTr" style="dispaly: none">
+            <td>
+                <label for="ActionName">
+                    关联菜单:
+                </label>
+            </td>
+            <td>
+                <input id="menuId" class="easyui-textbox" type="text" name="ActionMenu" data-options="required:true,missingMessage:'关联菜单不能为空'" value="@Model.ActionMenu" style="width:200px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="ParentID">
+                    上级权限:
+                </label>
+            </td>
+            <td>
+                <input id="ParentID" class="easyui-combobox" type="text" name="ParentID" data-options="required:true,missingMessage:'上级权限不能为空'" value="@Model.ParentID" style="width:200px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="ActionName">
+                    权限名称:
+                </label>
+            </td>
+            <td>
+                <input id="Department" class="easyui-textbox" type="text" name="ActionName" data-options="required:true,missingMessage:'权限名称不能为空',validType:['chinese','length[2,20]']" value="@Model.ActionName" style="width:200px" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Disc">
+                    权限描述:
+                </label>
+            </td>
+            <td>
+                <input class="easyui-textbox" name="Disc" data-options="multiline:true,required:true,missingMessage:'权限描述不能为空',validType:'length[2,200]'" style="height:60px;width:200px" value="@Model.Disc" />
+            </td>
+        </tr>
+    </table>
+</form>
+<script src="~/Scripts/Easyui/easyui-validate-extend.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //如果设置菜单权限时，显示关联菜单按钮
+
+        BindParentCombobox();
+        BindMenuCombobox();
+
+        // 设置菜单类型并绑定
+        $("#actionType").combobox({
+            valueField: "id",
+            textField: "text",
+            data: [{ id: "0", text: "按钮权限" }, { id: "1", text: "菜单权限"}],
+            onSelect: function (item) {
+                if (item.id == 0) {
+                    $('#menuId').combotree("setValue", " ");
+                    $('#menuId').combotree('disable');
+                } else {
+                    $('#menuId').combotree("setValue", "首页");
+                    $('#menuId').combotree('enable');
+                }
+            },
+            onLoadSuccess: function () {
+
+                var actionType = "@Model.Type";
+
+                if (actionType == 0) {
+                    $('#menuId').combotree('disable');
+                }
+                else {
+                    $('#menuId').combotree('enable');
+                }
+
+                $('#actionType').combobox('setValue', actionType);
+            }
+        });
+    });
+
+    //绑定上级菜单
+    function BindParentCombobox() {
+        $("#ParentID").combotree({
+            url: '/Action/GetActionComboTree',
+            onLoadSuccess: function () {
+                if ("@Request["parentid"]" != "") {
+                    $('#ParentID').combotree('setValue', "@Request["parentid"]");
+                }
+            }
+        });
+    }
+    //绑定菜单按钮
+    function BindMenuCombobox() {
+        $("#menuId").combotree({
+            url: '/Menu/GetMenuComboTree'
+        });
+    }
+</script>

@@ -1,0 +1,285 @@
+﻿body
+{
+    font-size: 12px;
+}
+
+/* 测试工具 web essentials 2012  */
+.d1
+{
+    width: 200px;
+    height: 200px;
+    border-radius: 3px 5px;
+    color: #ffa8a8;
+    font-size: 14px;
+    font-family: Arial,Verdana;
+}
+
+/* charts */
+.dchart
+{
+    /*min-width: 500px;     min-height: 260px;*/
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ASA */
+.querytypes
+{
+    width: 120px;
+}
+
+/* worklength */
+.wlnorth
+{
+    z-index: 100;
+    height: 30px;
+    font-size: 12px;
+}
+
+.wlnorth2
+{
+    z-index: 100;
+    height: 140px;
+    font-size: 12px;
+}
+
+
+.wlRoles, .hcselect
+{
+    width: 110px;
+}
+
+/* layout */
+.dnorth
+{
+    height: 65px;
+}
+
+.dnleft
+{
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    width: 190px;
+}
+
+.dncenter
+{
+    position: absolute;
+    top: 10px;
+    left: 250px;
+    width: 680px;
+}
+
+.dnright
+{
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    width: 400px;
+}
+
+.dnra
+{
+    color: red;
+    font-weight: bold;
+}
+
+.dnrleft
+{
+    float: left;
+    margin-top: 5px;
+}
+
+.dnrright
+{
+    float: right;
+}
+
+.dsouth
+{
+    padding: 5px;
+    height: 22px;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dtime
+{
+    padding-left: 68px;
+}
+
+/* msg */
+.error
+{
+    padding-left: 68px;
+    height: 65px;
+    background: url('/Scripts/EasyUI/themes/icons/JulieCT/err.png') no-repeat left center;
+    line-height: 65px;
+}
+
+/* forms */
+
+#loginDialog
+{
+    width: 400px;
+    height: 200px;
+    padding: 10px;
+}
+
+#loginDialog table td.td1
+{
+    width: 15%;
+}
+
+#loginDialog input
+{
+    /* margin: 5px 0 6px 0; */ /* padding: 5px; */ /*width: 280px;  */ /*height: 30px;  */ /* border: 1px solid #ffa8a8; */ /* font-size: 1.2em; */ /*     border: 1px solid #e2e2e2;     background: #fff;     color: #333;*/
+}
+#loginDialog tr
+{
+    line-height: 50px;
+}
+#loginDialog input:focus
+{
+    /* border: 1px solid #7ac0da; */
+}
+
+#loginDialog .dialog-button
+{
+    background: none;
+}
+
+
+/*emp form*/
+#dgForm td
+{
+    font-size: 12px;
+}
+
+
+/* surgery conditioin */
+.input2
+{
+    width: 120px;
+}
+.input3
+{
+    width: 40px;
+}
+.input4
+{
+    width: 145px;
+}
+.input6
+{
+    width: 480px;
+}
+
+.sqwlnorth
+{
+    height: 170px;
+}
+
+.sqtoolbar
+{
+    background-color: #f5f5f5;
+}
+
+.divmore
+{
+    margin-top: 8px;
+    background-color: #f5f5f5;
+}
+/*.divmore table { 
+    border:0;
+    width:100%;
+    background-color:#7ac0da;
+}*/
+.divmore table td
+{
+    font-size: 12px;
+    height: 26px;
+}
+.divmore table td.td1
+{
+    text-align: right;
+    width: 70px;
+}
+.divmore table td.td2
+{
+    text-align: left;
+    width: 160px;
+}
+
+/* role */
+.divrole table
+{
+    font-size: 12px;
+    font-weight: bold;
+    cellpadding: 5;
+    width: 80%;
+}
+
+.divrole table td.td1
+{
+    text-align: right;
+    color: black;
+    width: 8%;
+    min-height: 30px;
+    line-height: 30px;
+}
+
+.divrole table td span.span1
+{
+    font-size: 16px;
+    color: ffa8a8;
+}
+
+.divrole table td span.span2
+{
+    font-size: 14px;
+    line-height: 30px;
+    color: #7ac0da;
+}
+
+.divrole .aback
+{
+    font-size: 12px;
+    color: black;
+    text-decoration: none;
+}
+.ltd
+{
+    border-bottom: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
+    height: 25px;
+    width: 15%;
+    text-align: right;
+}
+.rtd
+{
+    border-bottom: 1px solid #d3d3d3;
+    border-right: 1px solid #d3d3d3;
+    height: 25px;
+    width: 35%;
+    text-align: left;
+    padding-left: 2px;
+}
+/**************************** 更新easyui中样式 ****************************/
+/*combobox item 鼠标样式修改 */
+.combobox-item-hover
+{
+    cursor: pointer;
+}
+a
+{
+    outline: none !important;
+}
+
+.tooltip
+{
+    word-break: break-all !important;
+    word-wrap: break-word !important;
+}

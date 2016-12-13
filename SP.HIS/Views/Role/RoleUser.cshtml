@@ -1,0 +1,446 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section queryform{
+    <div style="padding:8px">
+        <span>设置用户角色：选择用户，设置该用户所属的角色。</span>
+    </div>
+}
+
+
+<div class="easyui-panel" style="height:100%;padding:1px" data-options="border:false">
+    <div class="easyui-layout" data-options="fit:true">
+        <div class="easyui-panel" data-options="region:'west'" style="width:50%;padding:3px" title="用户">
+            <div style="height:30px">
+                <label for="userName">用户名称:</label>
+                <input class="easyui-textbox" type="text" id="userName" name="userName" style="width: 115px" />
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="userQuery">查询</a>
+            </div>
+            <div style="height:510px">
+                <table id="userGrid"></table>
+            </div>
+        </div>
+        <div class="easyui-panel" data-options="region:'east'" style="width:49%;padding:3px" title="角色">
+            <div style="height:30px">
+                <label for="roleName">角色名称:</label>
+                <input class="easyui-textbox" type="text" id="roleName" name="roleName" style="width: 115px" />
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" id="roleQuery">查询</a>
+            </div>
+            <div style="height:510px;overflow:hidden">
+                <table id="roleGrid"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dialog"></div>
+
+<script type="text/javascript">
+    //用户角色设置页面
+    $(document).ready(function () {
+
+        //初始化角色grid
+        InitRoleToolBar();
+        //初始化用户grid
+        InitUserToolBar();
+
+        $("#userQuery").click(function () {
+            $("#userGrid").datagrid("load", {
+                name: $("#userName").val()
+            });
+        });
+
+        $("#roleQuery").click(function () {
+            QueryRoleGrid();
+        });
+    });
+
+
+    //根据权限设置用户的操作按钮
+    function InitUserToolBar() {
+        var toolbar = [];
+        var actionBar1 = {
+            id: "RT06010101",
+            text: "新增"
+        };
+        var actionBar2 = {
+            id: "RT06010102",
+            text: "编辑"
+        };
+        actionBar1.iconCls = "icon-add",
+        actionBar1.handler = function () {
+            ShowUserDialog('add');
+        }
+        actionBar2.iconCls = "icon-edit",
+        actionBar2.handler = function () {
+            ShowUserDialog('edit');
+        }
+        toolbar.push(actionBar1);
+        toolbar.push(actionBar2);
+        InitUserGrid(toolbar);
+    }
+    function InitUserToolBar2() {
+
+        $.ajax({
+            url: "/UserRole/GetUserButtonAction",
+            data: { actionNum: "RT060101" }, //该菜单对应的权限编码
+            dataType: "json",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "获取权限失败 " + returnData.message);
+                    return;
+                }
+
+                var toolbar = [];
+                $.each(returnData.data, function (index, item) {
+                    var actionBar = {
+                        id: item.ActionNum,
+                        text: item.ActionName
+                    };
+                    //新增
+                    if (item.ActionNum == "RT06010101") { //新增
+                        actionBar.iconCls = "icon-add",
+                        actionBar.handler = function () {
+                            ShowUserDialog('add');
+                        }
+                    } else if (item.ActionNum == "RT06010102") { //编辑
+                        actionBar.iconCls = "icon-edit",
+                        actionBar.handler = function () {
+                            ShowUserDialog('edit');
+                        }
+                    }
+                    else {
+                        return true;
+                    }
+
+                    toolbar.push(actionBar);
+                })
+                //根据权限加载按钮
+                InitUserGrid(toolbar);
+            }
+        });
+
+    }
+    //加载用户grid
+    function InitUserGrid(toolbar) {
+        var queryData = {
+            name: $("#userName").val()
+        };
+        $('#userGrid').datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: '/User/GetAppUserList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            singleSelect: true,  //选中行唯一
+            method: 'post',
+            idField: 'ID',
+            queryParams: queryData,  //异步查询的参数
+            columns: [[
+                          { title: "Id", field: "ID", width: 95, hidden: true },
+                          { title: "用户编码", field: "UserName", width: 95 },
+                          { title: "用户名称", field: "Name" },
+                          { title: "职位", field: "Position", width: 95 },
+                          { title: "部门编号", field: "AppDepartmentID", width: 95, hidden: true },
+                          { title: "所在部门", field: "AppDepartmentName", width: 95 },
+                          { title: "创建时间", field: "CreateTime", width: 125 }
+            ]],
+            toolbar: toolbar,
+            onSelect: function (index, row) {
+                QueryRoleGrid();
+            }
+        })
+    }
+    //编辑角色弹窗
+    function ShowUserDialog(action) {
+
+        var title = "新增角色";
+        var roleID = 0;
+        if (action == "edit") {
+            title = "编辑角色";
+            var selectedRows = $("#userGrid").datagrid("getSelected");
+            if (!selectedRows) {
+                $.messager.alert("提示", "请选择需要编辑的数据");
+                return;
+            }
+            roleID = selectedRows.ID;
+        }
+
+        var href = "/User/Dialog?Id=" + roleID;
+        $("#dialog").dialog({
+            title: title,
+            width: 550,
+            height: 290,
+            closed: false,
+            cache: false,
+            href: href,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SaveUser();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+
+    function SaveUser() {
+        //保存按钮
+        $("#dialogForm").form("submit", {
+            url: "/AppUser/SaveUser",
+            success: function (data) {
+                //form 提交返回的是字符串，需要转换成json
+                var returnData = $.parseJSON(data)
+                if (returnData && returnData.result == 'ok') {
+                    //$.messager.alert("提示", returnData.message);
+
+                    $("#userGrid").datagrid("load", {
+                        name: $("#userName").val()
+                    });
+
+                    $("#dialog").dialog("close");
+                }
+                else {
+                    $.messager.alert("提示", returnData.message);
+                }
+            }
+        });
+    }
+
+
+    //根据权限设置角色操作按钮
+    function InitRoleToolBar() {
+        $.ajax({
+            url: "/AppUserRole/GetUserButtonAction",
+            data: { actionNum: "RT060202" }, //该菜单对应的权限编码
+            dataType: "json",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "获取权限失败 " + returnData.message);
+                    return;
+                }
+
+                var toolbar = [];
+                $.each(returnData.data, function (index, item) {
+                    var actionBar = {
+                        id: item.ActionNum,
+                        text: item.ActionName
+                    };
+                    //新增
+                    if (item.ActionNum == "RT06020201") { //新增
+                        actionBar.iconCls = "icon-add",
+                        actionBar.handler = function () {
+                            SetRole();
+                        }
+                    } else if (item.ActionNum == "RT06020202") { //删除角色
+                        actionBar.iconCls = "icon-remove",
+                        actionBar.handler = function () {
+                            RemoveRole();
+                        }
+                    }
+
+                    toolbar.push(actionBar);
+                })
+                //根据权限加载按钮
+                InitRoleGrid(toolbar);
+            }
+        });
+
+    }
+    //加载角色管理用户
+    function InitRoleGrid(toolbar) {
+
+        var queryData = {
+            name: $("#roleName").val(),
+            userId: "-1"
+        };
+
+        $('#roleGrid').datagrid({             //定位到Table标签，Table标签的ID是grid
+            url: '/AppUserRole/GetAppUserRoleList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            fit: true,
+            fitColumns: true,
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            pageSize: 15,
+            pageList: [15, 30, 45, 60],
+            rownumbers: true,
+            sortOrder: 'asc',
+            remoteSort: false,
+            singleSelect: true,  //选中行唯一
+            method: 'post',
+            idField: 'ID',
+            queryParams: queryData,  //异步查询的参数
+            columns: [[
+                          { title: "Id", field: "ID", width: 95, hidden: true },
+                          { title: "角色名称", field: "RoleName", width: 95 },
+                          { title: "角色编码", field: "RoleNum", width: 95 },
+                          { title: "角色说明", field: "Disc" },
+                          { title: "创建时间", field: "CreateTime", width: 105 }
+            ]],
+            toolbar: toolbar
+        })
+    }
+
+    //查询Role，重新生成grid
+    function QueryRoleGrid() {
+        var selectRow = $("#userGrid").datagrid("getSelected");
+        if (!selectRow) {
+            $.messager.alert("提示", "请先选择用户");
+            return;
+        }
+
+        $("#roleGrid").datagrid("load", {
+            name: $("#roleName").val(),
+            userId: selectRow.ID
+        });
+    }
+
+    // 为用户设置角色
+    function SetRole() {
+        var selectUser = $("#userGrid").datagrid("getSelected");
+        if (!selectUser) {
+            $.messager.alert("提示", "请选择需要添加角色的用户");
+            return;
+        }
+
+        var userID = selectUser.ID;
+        var href = "/AppRole/SetUserRole?userid=" + userID;
+
+        $("#dialog").dialog({
+            title: "选择角色",
+            width: 550,
+            height: 410,
+            closed: false,
+            cache: false,
+            href: href,
+            modal: true,
+            buttons: [{
+                text: '保存',
+                handler: function () {
+                    SaveUserRole();
+                }
+            }, {
+                text: '取消',
+                handler: function () {
+                    $("#dialog").dialog("close");
+                }
+            }]
+        });
+    }
+    //移除用户角色
+    function RemoveRole() {
+        var selectUser = $("#userGrid").datagrid("getSelected");
+        if (!selectUser) {
+            $.messager.alert("提示", "请选择需要移除角色的用户");
+            return;
+        }
+
+        var selectRole = $("#roleGrid").datagrid("getSelected");
+        if (!selectRole) {
+            $.messager.alert("提示", "请选择需要移除的角色");
+            return;
+        }
+
+        $.messager.confirm("删除提示", "确定移除用户的角色么？", function (data) {
+            if (!data) {
+                return;
+            }
+
+            $.ajax({
+                url: "/AppUserRole/DeleteUserRole",
+                data: {
+                    userid: selectUser.ID,
+                    roleid: selectRole.ID
+                },
+                dataType: "json",
+                type: "post",
+                success: function (returnData) {
+                    //failed
+                    if (returnData.result == "error") {
+                        $.messager.alert("提示", "删除角色失败" + returnData.message);
+                        return;
+                    }
+                    //success
+                    //$.messager.alert("提示", "删除角色成功");
+                    $("#roleGrid").datagrid("load", {
+                        name: $("#roleName").val(),
+                        userId: selectUser.ID
+                    });
+                },
+                error: function (returnData) {
+                    $.messager.alert("提示", "删除角色失败 ");
+                }
+            });
+        });
+
+
+
+    }
+
+    //保存用户权限
+    function SaveUserRole() {
+        var selection = $("#dlgRoleGrid").datagrid("getSelections");
+
+        var userid = $("#dlgUserId").val();
+
+        var roleids = [];
+        $.each(selection, function (index, item) {
+            roleids.push(item.ID);
+        });
+
+        var param = {
+            userid: userid,
+            roleids: roleids.join(',')
+        };
+        $.ajax({
+            url: "/AppUserRole/SetUserRole",
+            data: param,
+            dataType: "json",
+            type: "post",
+            success: function (returnData) {
+                //failed
+                if (returnData.result == "error") {
+                    $.messager.alert("提示", "设置角色失败 " + returnData.message);
+                    return;
+                }
+
+                //部分成功
+                if (returnData.result == "somerole") {
+                    $.messager.alert("提示", returnData.message);
+                }
+                //success
+                //$.messager.alert("提示", "设置成功");
+                $("#dialog").dialog("close");
+
+                $("#roleGrid").datagrid("load", {
+                    name: $("#roleName").val(),
+                    userId: userid
+                });
+            },
+            error: function (returnData) {
+                $.messager.alert("提示", "设置角色失败 ");
+            }
+        });
+
+    }
+
+</script>
