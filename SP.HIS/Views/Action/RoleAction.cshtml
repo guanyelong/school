@@ -53,6 +53,28 @@
 
     //根据权限加载角色工具栏
     function InitRoleToolbar() {
+        var toolbar = [];
+        var actionBar1 = {
+            id: "RT06020101",
+            text: "新增"
+        };
+        var actionBar2 = {
+            id: "RT06020102",
+            text: "编辑"
+        };
+        actionBar1.iconCls = "icon-add",
+        actionBar1.handler = function () {
+            ShowRoleDialog('add');
+        }
+        actionBar2.iconCls = "icon-edit",
+        actionBar2.handler = function () {
+            ShowRoleDialog('edit');
+        }
+        toolbar.push(actionBar1);
+        toolbar.push(actionBar2);
+        InitRoleGrid(toolbar);
+    }
+    function InitRoleToolbar2() {
         $.ajax({
             url: "/UserRole/GetUserButtonAction",
             data: { actionNum: "RT060201" }, //该菜单对应的权限编码
@@ -114,10 +136,10 @@
             queryParams: queryData,  //异步查询的参数
             columns: [[
                           { title: "Id", field: "ID", width: 95, hidden: true },
-                          { title: "角色名称", field: "RoleName", width: 95 },
-                          { title: "角色编码", field: "RoleNum", width: 95 },
+                          { title: "角色名称", field: "ROLENAME", width: 95 },
+                          { title: "角色编码", field: "ROLENUM", width: 95 },
                           { title: "角色说明", field: "Disc" },
-                          { title: "创建时间", field: "CreateTime", width: 105 }
+                          { title: "创建时间", field: "CREATETIME", width: 105 }
             ]],
             toolbar: toolbar,
             onSelect: function (index, row) {
@@ -192,6 +214,20 @@
 
     //根据权限获取设置权限工具栏
     function InitActionToolbar() {
+        var toolbar = [];
+        var actionBar1 = {
+            id: "RT06030201",
+            text: "新增"
+        };
+        actionBar1.iconCls = "icon-add",
+        actionBar1.handler = function () {
+            SetAction();
+        }
+        toolbar.push(actionBar1);
+        InitActionGrid(toolbar);
+    }
+
+    function InitActionToolbar2() {
 
         //    var toolbar = [{
         //        id: 'btnAdd',

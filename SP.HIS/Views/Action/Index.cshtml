@@ -21,7 +21,48 @@
         //加载Grid
         InitToolbar();
     });
+
     function InitToolbar() {
+        var toolbar = [];
+        var actionBar1 = {
+            id: "RT06030101",
+            text: "新增"
+        };
+        var actionBar2 = {
+            id: "RT06030102",
+            text: "编辑"
+        };
+        var actionBar3 = {
+            id: "RT06030103",
+            text: "删除"
+        };
+        var actionBar4 = {
+            id: "RT06030104",
+            text: "刷新"
+        };
+        actionBar1.iconCls = "icon-add",
+        actionBar1.handler = function () {
+            ShowEditOrViewDialog('add');
+        }
+        actionBar2.iconCls = "icon-edit",
+        actionBar2.handler = function () {
+            ShowEditOrViewDialog('edit');
+        }
+        actionBar3.iconCls = "icon-remove",
+        actionBar3.handler = function () {
+            DeleteSelectRow();
+        }
+        actionBar4.iconCls = "icon-reload",
+        actionBar4.handler = function () {
+            $("#grid").datagrid("reload");
+        }
+        toolbar.push(actionBar1);
+        toolbar.push(actionBar2);
+        toolbar.push(actionBar3);
+        toolbar.push(actionBar4);
+        InitGrid(toolbar);
+    }
+    function InitToolbar2() {
         $.ajax({
             url: "/UserRole/GetUserButtonAction",
             data: { actionNum: "RT060301" }, //该菜单对应的权限编码

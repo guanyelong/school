@@ -180,7 +180,60 @@ namespace SP.Business.HIS
             htItem.Add("text", actionItem.ActionName);
             return htItem;
         }
+        /// <summary>
+        /// 设置角色的权限
+        /// </summary>
+        /// <param name="roleid">角色Id</param>
+        /// <param name="p">权限Id</param>
+        /// <param name="errMsg"></param>
+        public void SaveRoleAction(int roleid, string[] actionIds, ref string errMsg)
+        {
+            try
+            {
+                List<SYS_ROLEACTIONMAPPING> existList = null;
+                using (HISDataEntities appEntities = new HISDataEntities())
+                {
 
+                    existList = appEntities.SYS_ROLEACTIONMAPPING.Where(o => o.ROLEID == roleid).ToList();
+                    //检查是否存在，存在则忽略，不存在则插入
+                    foreach (string actionId in actionIds)
+                    {
+
+                        int intActionId = Convert.ToInt32(actionId);
+
+                        var actionItem = existList.Where(o => o.ACTIONID == intActionId).ToList();
+                        if (actionItem != null && actionItem.Count() > 0)
+                        {
+                            continue;
+                        }
+
+                        //不存在的插入进数据库
+                        SYS_ROLEACTIONMAPPING newMapping = new SYS_ROLEACTIONMAPPING();
+                        newMapping.ROLEID = roleid;
+                        newMapping.ACTIONID = intActionId;
+                        newMapping.CREATETIME = DateTime.Now;
+                        appEntities.SYS_ROLEACTIONMAPPING.Add(newMapping);
+                    }
+
+                    //遍历数据库中的数据，数据库存在但是参数中没有的，需要删除
+                    foreach (var item in existList)
+                    {
+                        if (!actionIds.Contains(item.ACTIONID.ToString()))
+                        {
+                            var deleteItem = appEntities.SYS_ROLEACTIONMAPPING.Where(o => o.ID == item.ID).FirstOrDefault();
+                            appEntities.SYS_ROLEACTIONMAPPING.Remove(deleteItem);
+                        }
+                    }
+
+                    //提交所做的更改
+                    appEntities.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                errMsg = e.Message;
+            }
+        }
 
     }
 }

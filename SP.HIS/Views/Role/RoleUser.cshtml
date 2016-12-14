@@ -148,11 +148,11 @@
             queryParams: queryData,  //异步查询的参数
             columns: [[
                           { title: "Id", field: "ID", width: 95, hidden: true },
-                          { title: "用户编码", field: "UserName", width: 95 },
-                          { title: "用户名称", field: "Name" },
+                          { title: "用户编码", field: "LoginName", width: 95 },
+                          { title: "用户名称", field: "NAME" },
                           { title: "职位", field: "Position", width: 95 },
-                          { title: "部门编号", field: "AppDepartmentID", width: 95, hidden: true },
-                          { title: "所在部门", field: "AppDepartmentName", width: 95 },
+                          { title: "部门编号", field: "DepartmentID", width: 95, hidden: true },
+                          { title: "所在部门", field: "DepartmentName", width: 95 },
                           { title: "创建时间", field: "CreateTime", width: 125 }
             ]],
             toolbar: toolbar,
@@ -202,7 +202,7 @@
     function SaveUser() {
         //保存按钮
         $("#dialogForm").form("submit", {
-            url: "/AppUser/SaveUser",
+            url: "/User/SaveUser",
             success: function (data) {
                 //form 提交返回的是字符串，需要转换成json
                 var returnData = $.parseJSON(data)
@@ -225,8 +225,30 @@
 
     //根据权限设置角色操作按钮
     function InitRoleToolBar() {
+        var toolbar = [];
+        var actionBar1 = {
+            id: "RT06020201",
+            text: "新增"
+        };
+        var actionBar2 = {
+            id: "RT06020202",
+            text: "删除"
+        };
+        actionBar1.iconCls = "icon-add",
+        actionBar1.handler = function () {
+            SetRole();
+        }
+        actionBar2.iconCls = "icon-remove",
+        actionBar2.handler = function () {
+            RemoveRole();
+        }
+        toolbar.push(actionBar1);
+        toolbar.push(actionBar2);
+        InitRoleGrid(toolbar);
+    }
+    function InitRoleToolBar2() {
         $.ajax({
-            url: "/AppUserRole/GetUserButtonAction",
+            url: "/UserRole/GetUserButtonAction",
             data: { actionNum: "RT060202" }, //该菜单对应的权限编码
             dataType: "json",
             success: function (returnData) {
@@ -272,7 +294,7 @@
         };
 
         $('#roleGrid').datagrid({             //定位到Table标签，Table标签的ID是grid
-            url: '/AppUserRole/GetAppUserRoleList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            url: '/UserRole/GetAppUserRoleList',   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             fit: true,
             fitColumns: true,
             nowrap: true,
@@ -291,10 +313,10 @@
             queryParams: queryData,  //异步查询的参数
             columns: [[
                           { title: "Id", field: "ID", width: 95, hidden: true },
-                          { title: "角色名称", field: "RoleName", width: 95 },
-                          { title: "角色编码", field: "RoleNum", width: 95 },
+                          { title: "角色名称", field: "ROLENAME", width: 95 },
+                          { title: "角色编码", field: "ROLENUM", width: 95 },
                           { title: "角色说明", field: "Disc" },
-                          { title: "创建时间", field: "CreateTime", width: 105 }
+                          { title: "创建时间", field: "CREATETIME", width: 105 }
             ]],
             toolbar: toolbar
         })
@@ -323,7 +345,7 @@
         }
 
         var userID = selectUser.ID;
-        var href = "/AppRole/SetUserRole?userid=" + userID;
+        var href = "/Role/SetUserRole?userid=" + userID;
 
         $("#dialog").dialog({
             title: "选择角色",
@@ -366,7 +388,7 @@
             }
 
             $.ajax({
-                url: "/AppUserRole/DeleteUserRole",
+                url: "/UserRole/DeleteUserRole",
                 data: {
                     userid: selectUser.ID,
                     roleid: selectRole.ID

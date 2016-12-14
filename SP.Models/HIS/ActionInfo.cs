@@ -17,6 +17,21 @@ namespace SP.Models.HIS
         public int Type { get; set; }
 
     }
+    public enum AppActionType
+    {
+        /// <summary>
+        /// 按钮权限
+        /// </summary>
+        ButtonAction = 0,
+        /// <summary>
+        /// 菜单权限
+        /// </summary>
+        MenuAction = 1,
+        /// <summary>
+        /// 所有权限
+        /// </summary>
+        AllAction = 2
+    }
 
-   
+
 }

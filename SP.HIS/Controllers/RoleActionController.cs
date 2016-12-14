@@ -1,4 +1,5 @@
 ﻿using SP.Business.HIS;
+using SP.Models.HIS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,6 +57,34 @@ namespace SP.HIS.Controllers
             List<Hashtable> treeList = roleActionBLL.GetRoleActionRoleTreeList(Convert.ToInt32(roleId), ref errMsg);
 
             return Json(treeList, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 设置角色的权限
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult SaveRoleAction()
+        {
+            string roleid = Request["roleid"];
+            string actionids = Request["actionids"];
+            if (string.IsNullOrEmpty(roleid) || string.IsNullOrEmpty(actionids))
+            {
+                return Json(new { result = "error", message = "参数错误" });
+            }
+
+            string errMsg = string.Empty;
+            roleActionBLL.SaveRoleAction(Convert.ToInt32(roleid), actionids.Split(','), ref errMsg);
+            // 刷新当前用户的权限列表
+            UserRoleBLL userRole = new UserRoleBLL();
+            AdminSystemInfo.UpdateActionList(userRole.GetAppUserActionList(AdminSystemInfo.CurrentUser.ID, SP.Models.HIS.AppActionType.AllAction));
+
+            if (!string.IsNullOrEmpty(errMsg))
+            {
+                return Json(new { result = "error", message = "参数错误" });
+            }
+
+            //Common.LogHelper.InsertLog("设置权限", 52, "角色权限");
+
+            return Json(new { result = "ok", message = "权限设置成功" });
         }
     }
 }

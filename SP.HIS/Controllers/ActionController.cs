@@ -18,6 +18,33 @@ namespace SP.HIS.Controllers
             return View();
         }
 
+        public ActionResult RoleAction()
+        {
+
+            return View();
+        }
+        /// <summary>
+        /// 新增编辑弹窗
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Dialog()
+        {
+            string actionId = Request["Id"];
+            if (string.IsNullOrEmpty(actionId) || actionId=="0")
+            {
+                SYS_Action ac = new SYS_Action() { ActionNum = "自动生成"};
+                return View(ac);
+            }
+            string errMsg = string.Empty;
+            SYS_Action actionModel = actionBLL.GetActionByID(Convert.ToInt32(actionId), ref errMsg);
+            if (string.IsNullOrEmpty(errMsg))
+            {
+                //记录操作日志
+                //Common.LogHelper.InsertLog(String.Format("新增权限,ID-{0}", actionModel.ID.ToString()), 51, "权限列表");
+                return View(actionModel);
+            }
+            return View(new SYS_Action());
+        }
         /// <summary>
         /// 角色权限页面，设置权限弹窗
         /// </summary>
@@ -38,7 +65,6 @@ namespace SP.HIS.Controllers
             }
 
             return View(role);
-
         }
         /// <summary>
         /// 获取权限列表
@@ -61,29 +87,7 @@ namespace SP.HIS.Controllers
             };
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-        /// <summary>
-        /// 新增编辑弹窗
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult Dialog()
-        {
-            string actionId = Request["Id"];
-            if (string.IsNullOrEmpty(actionId))
-            {
-                return View(new SYS_Action());
-            }
-
-            string errMsg = string.Empty;
-            SYS_Action actionModel = actionBLL.GetActionByID(Convert.ToInt32(actionId), ref errMsg);
-
-            if (string.IsNullOrEmpty(errMsg))
-            {
-                //记录操作日志
-                //Common.LogHelper.InsertLog(String.Format("新增权限,ID-{0}", actionModel.ID.ToString()), 51, "权限列表");
-                return View(actionModel);
-            }
-            return View(new SYS_Action());
-        }
+        
         /// <summary>
         /// 保存权限
         /// </summary>
@@ -136,11 +140,6 @@ namespace SP.HIS.Controllers
             return Json(actionList, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult RoleAction()
-        {
-
-            return View();
-        }
 
         
     }

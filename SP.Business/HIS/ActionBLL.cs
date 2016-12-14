@@ -22,12 +22,13 @@ namespace SP.Business.HIS
                 string actionNum = CreateActionNum(actionItem);
                 //创建权限
                 actionItem.ActionNum = actionNum;
+                if (actionItem.ParentID == null) actionItem.ParentID = 0;
                 using (HISDataEntities appEntities = new HISDataEntities())
                 {
                     actionItem.CREATETIME = DateTime.Now;
-
+                    actionItem.Flag = 1;
                     //新增权限名称不能重复
-                    var findList = appEntities.SYS_Action.Where(o => o.ActionName == actionItem.ActionName && o.ParentID == actionItem.ParentID);
+                    var findList = appEntities.SYS_Action.Where(o => o.Flag == 1 && o.ActionName == actionItem.ActionName && o.ParentID == actionItem.ParentID);
                     if (findList.Count() > 0)
                     {
                         errMsg = "权限名称已经存在";
