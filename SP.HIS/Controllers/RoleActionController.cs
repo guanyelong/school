@@ -75,7 +75,7 @@ namespace SP.HIS.Controllers
             roleActionBLL.SaveRoleAction(Convert.ToInt32(roleid), actionids.Split(','), ref errMsg);
             // 刷新当前用户的权限列表
             UserRoleBLL userRole = new UserRoleBLL();
-            AdminSystemInfo.UpdateActionList(userRole.GetAppUserActionList(AdminSystemInfo.CurrentUser.ID, SP.Models.HIS.AppActionType.AllAction));
+            //AdminSystemInfo.UpdateActionList(userRole.GetAppUserActionList(AdminSystemInfo.CurrentUser.ID, SP.Models.HIS.AppActionType.AllAction));
 
             if (!string.IsNullOrEmpty(errMsg))
             {

@@ -12,11 +12,11 @@ namespace SP.Models.HIS
         /// <summary>
         /// 当前用户
         /// </summary>
-        public static UserInfo CurrentUser
+        public static SYS_USERINFO CurrentUser
         {
             get
             {
-                return HttpContext.Current.Session["AdminCurrentUser"] as UserInfo;
+                return HttpContext.Current.Session["AdminCurrentUser"] as SYS_USERINFO;
             }
             set { HttpContext.Current.Session["AdminCurrentUser"] = value; }
         }

@@ -260,7 +260,15 @@ namespace SP.Business.HIS
             }
         }
 
-
+        public SYS_USERINFO ValidateLogin(SYS_USERINFO info)
+        {
+            using (HISDataEntities appEntitys=new HISDataEntities())
+            {
+                var pwd = Common.MD5Helper.MD5Encrypt32bit(info.PASSWORD);
+                var item = appEntitys.SYS_USERINFO.Where(p => p.LoginName == info.LoginName && p.PASSWORD == pwd).FirstOrDefault();
+                return item;
+            }
+        }
 
     }
 }

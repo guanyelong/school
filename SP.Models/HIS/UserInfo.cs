@@ -43,6 +43,7 @@ namespace SP.Models.HIS
         [RegularExpression(@"^[\u4E00-\u9FA5|\W|\w]{1,32}$", ErrorMessage = "6-32位字符，支持中英文")]
         public string LoginName { get; set; }
         [Display(Name = "密码")]
+        [Required(ErrorMessage = "请输入密码")]
         [DataType(DataType.Password)]
         public string PASSWORD { get; set; }
     }

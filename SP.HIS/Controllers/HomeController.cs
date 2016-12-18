@@ -1,5 +1,6 @@
 ﻿using SP.Business.HIS;
 using SP.HIS.Models;
+using SP.Models;
 using SP.Models.HIS;
 using System;
 using System.Collections;
@@ -8,31 +9,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace SP.HIS.Controllers
 {
+    
     public class HomeController : BaseController
     {
+        private UserRoleBLL userRole = new UserRoleBLL();
+        private UserInfoBLL userBLL = new UserInfoBLL();
         public ActionResult Index()
         {
             return View();
         }
-
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult LoginUser(SP.Models.HIS.LoginInfo info)
-        {
-            if (ModelState.IsValid && info != null)
-            {
-                JavaScriptSerializer ser = new JavaScriptSerializer();
-            }
-            return View("Main");
-        }
-
         public ActionResult Main()
         {
             RoleInfoBLL userRoleBll = new RoleInfoBLL();
@@ -93,5 +82,6 @@ namespace SP.HIS.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
             #endregion
         }
+
     }
 }
