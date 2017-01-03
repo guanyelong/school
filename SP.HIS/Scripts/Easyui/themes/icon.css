@@ -93,45 +93,45 @@
 }
 /***********主页面顶部菜单样式************/
 .icon-menu{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/menu.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/menu.png') no-repeat center center;
 }
 .icon-menu1{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/menu1.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/menu1.png') no-repeat center center;
 }
 .icon-menu2{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/menu2.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/menu2.png') no-repeat center center;
 }
 .icon-menu3{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/menu3.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/menu3.png') no-repeat center center;
 }
 .icon-menu4{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/menu4.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/menu4.png') no-repeat center center;
 }
 .icon-logout{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/logout.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/logout.png') no-repeat center center;
 }
 .icon-smile{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/smile.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/smile.png') no-repeat center center;
 }
 /* tabs icons */
 .icon-tabRefresh{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/tabRefresh.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/tabRefresh.png') no-repeat center center;
 }
 .icon-tabNew{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/tabNew.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/tabNew.png') no-repeat center center;
 }
 .icon-tabCopy{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/tabCopy.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/tabCopy.png') no-repeat center center;
 }
 .icon-tabClose{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/tabClose.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/tabClose.png') no-repeat center center;
 }
 .icon-otherTabsClose{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/tabClose2.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/tabClose2.png') no-repeat center center;
 }
 .icon-tabsCloseAll{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/tabsCloseAll.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/tabsCloseAll.png') no-repeat center center;
 }
 .icon-detial{
-	background:url('/Scripts/Easyui-1.4/themes/icons/JulieCT/ilist.png') no-repeat center center;
+	background:url('/Scripts/Easyui/themes/icons/JulieCT/ilist.png') no-repeat center center;
 }

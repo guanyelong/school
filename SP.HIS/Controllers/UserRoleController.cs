@@ -87,6 +87,61 @@ namespace SP.HIS.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
         /// <summary>
+        /// 为用户设置角色
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="roleids"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult SetUserRole(string userid, string roleids)
+        {
+
+            if (string.IsNullOrEmpty(userid) || string.IsNullOrEmpty(roleids))
+            {
+                return Json(new
+                {
+                    result = "error",
+                    message = "用户和角色错误"
+                });
+            }
+
+            string[] roles = roleids.Split(',');
+            int[] intRoleIds = new int[roles.Length];
+            for (int i = 0; i < roles.Length; i++)
+            {
+                intRoleIds[i] = Convert.ToInt32(roles[i]);
+            }
+
+            string errMsg = string.Empty;
+            string existRoleNames;
+            userRoleBll.SetUserRole(Convert.ToInt32(userid), intRoleIds, ref errMsg, out existRoleNames);
+
+            if (!string.IsNullOrEmpty(errMsg))
+            {
+                return Json(new
+                {
+                    result = "error",
+                    message = errMsg
+                });
+            }
+
+            if (!string.IsNullOrEmpty(existRoleNames))
+            {
+                return Json(new
+                {
+                    result = "somerole",
+                    message = "角色 " + existRoleNames.Substring(1) + "已经存在"
+                });
+            }
+            //Common.LogHelper.InsertLog("设置用户角色", 48, "用户角色");
+            return Json(new
+            {
+                result = "success",
+                message = "设置角色成功"
+            });
+        }
+
+        /// <summary>
         /// 删除用户角色
         /// </summary>
         /// <param name="userid"></param>

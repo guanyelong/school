@@ -196,6 +196,50 @@ namespace SP.Business.HIS
                 return null;
             }
         }
-        
+        /// <summary>
+        /// 设置用户角色
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="intRoleIds"></param>
+        /// <param name="errMsg"></param>
+        public void SetUserRole(int userid, int[] intRoleIds, ref string errMsg, out string existRoleNames)
+        {
+            try
+            {
+                using (HISDataEntities appEntitys = new HISDataEntities())
+                {
+
+                    existRoleNames = string.Empty;
+                    var items = appEntitys.SYS_USERROLEMAPPING.Where(o => o.USERID == userid);
+                    foreach (int roleId in intRoleIds)
+                    {
+                        //存在则不添加
+                        if (items.Where(o => o.ROLEID == roleId).Count() > 0)
+                        {
+
+                            var appRole = appEntitys.SYS_ROLE.Where(o => o.ID == roleId).FirstOrDefault();
+                            if (appRole != null)
+                            {
+                                existRoleNames += "," + appRole.ROLENAME;
+                            }
+                            continue;
+                        }
+                        SYS_USERROLEMAPPING mapping = new SYS_USERROLEMAPPING();
+                        mapping.USERID = userid;
+                        mapping.ROLEID = roleId;
+                        mapping.CREATEDATE = DateTime.Now;
+                        appEntitys.SYS_USERROLEMAPPING.Add(mapping);
+                    }
+
+                    appEntitys.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                existRoleNames = string.Empty;
+                errMsg = e.Message;
+            }
+        }
+
     }
 }

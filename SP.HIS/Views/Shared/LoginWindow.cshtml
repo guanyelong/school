@@ -164,35 +164,6 @@
             <a href="#">忘记密码?</a>
             <a href="#">注册</a>
         </div>
-            @*<div class="Login">
-
-                    <div class="login_conaa">
-                        <div class="login_con">
-                            <div class="form">
-                                    <ul class="con">
-                                        <li class="xian">
-                                            <span class="icon">
-                                                <img src="~/Content/Images/Login/people.png" />
-                                            </span>@Html.DisplayFor(m=>m.LoginName)
-                                            @Html.TextBoxFor(m => m.LoginName, new { placeholder = "请输入用户名",@class= "kuang",id= "txt_loginName" })
-                                        </li>
-                                        <li class="xian">
-                                            <span class="icon">
-                                                <img src="~/Content/images/login/password.png" />
-                                            </span>@Html.PasswordFor(m=>m.PASSWORD,new { placeholder="请输入密码", @class = "kuang1" ,id = "txt_passWord" })
-                                        </li>
-                                        <li>
-                                            <span class="btn">
-
-                                              <input  value="登录" type="submit" />
-                                            </span>
-                                        </li>
-                                    </ul>
-                                    <div class="clear"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>*@
     }
     <div class="button">
         <a href="#">@@北京市医疗管理系统</a>
@@ -215,7 +186,11 @@
                         cache: false,
                         data: validata(),
                         success: function (data) {
-                            
+                            if (data.ifOk) {
+                                window.parent.location.href = "/Home/Main";
+                            } else {
+                                $.messager.alert('登录提示', data.errorMsg);
+                            }
                         }
                     });
                 }
